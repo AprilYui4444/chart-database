@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>譜面資料庫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: sticky filter bar over a jacket wall; each chart is a square cover with its constant printed large beneath.
+   Version colors are the ones used in the source spreadsheet (pink / blue / green). */
+:root {
+  --bg: #eceef5;
+  --surface: #ffffff;
+  --surface-2: #e2e6f1;
+  --ink: #12152a;
+  --ink-2: #50577a;
+  --line: #cfd5e6;
+  --on-ink: #f6f7fc;
+  --v1: #ff66cc;
+  --v2: #00b0f0;
+  --v3: #00b050;
+  --on-v: #10121c;
+  --focus: #1d4ed8;
+  --shadow: 0 10px 30px rgb(18 21 42 / .16);
+  --display: "Chakra Petch", "Noto Sans TC", system-ui, sans-serif;
+  --body: "Noto Sans TC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d0f19; --surface: #161a28; --surface-2: #212640; --ink: #eceef8; --ink-2: #9ba2c2;
+    --line: #2a3050; --on-ink: #0d0f19; --focus: #7aa2ff; --shadow: 0 10px 30px rgb(0 0 0 / .5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d0f19; --surface: #161a28; --surface-2: #212640; --ink: #eceef8; --ink-2: #9ba2c2;
+  --line: #2a3050; --on-ink: #0d0f19; --focus: #7aa2ff; --shadow: 0 10px 30px rgb(0 0 0 / .5);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font: 400 14px/1.5 var(--body); padding-inline: 16px; padding-block: 20px 40px; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 1240px; margin-inline: auto; display: grid; gap: 18px; }
+
+/* header */
+.head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; }
+.eyebrow { margin: 0; font: 500 12px/1 var(--mono); letter-spacing: .08em; color: var(--ink-2); }
+h1 { margin: 6px 0 0; font: 700 clamp(30px, 6vw, 46px)/1.05 var(--display); letter-spacing: .02em; text-wrap: balance; }
+.vers { display: flex; flex-wrap: wrap; gap: 8px; }
+.ver { --vc: var(--ink-2); display: grid; gap: 2px; text-align: left; min-width: 118px; padding: 9px 12px 10px; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--vc); border-radius: 8px; }
+.ver[data-v="1"] { --vc: var(--v1); } .ver[data-v="2"] { --vc: var(--v2); } .ver[data-v="3"] { --vc: var(--v3); }
+.ver b { font: 700 15px/1.2 var(--display); }
+.ver span { font: 400 11px/1.3 var(--mono); color: var(--ink-2); }
+.ver[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+.ver[aria-pressed="true"] span { color: var(--on-ink); opacity: .75; }
+
+/* controls */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.search { flex: 1 1 200px; min-width: 0; height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+.search::placeholder { color: var(--ink-2); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--bg); }
+.seg button { height: 34px; padding: 0 12px; border: 0; background: transparent; font-size: 13px; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+.sel { height: 36px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); max-width: 100%; }
+.meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--ink-2); font: 400 12px/1.4 var(--mono); }
+
+/* card grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
+.card { --vc: var(--ink-2); display: flex; flex-direction: column; min-width: 0; padding: 0; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; transition: transform .15s ease, border-color .15s ease; }
+.card[data-v="1"], .row[data-v="1"] { --vc: var(--v1); } .card[data-v="2"], .row[data-v="2"] { --vc: var(--v2); } .card[data-v="3"], .row[data-v="3"] { --vc: var(--v3); }
+.card:hover { transform: translateY(-2px); border-color: var(--ink-2); }
+.art { position: relative; aspect-ratio: 1 / 1; max-width: 100%; overflow: hidden;
+  background: repeating-linear-gradient(0deg, rgb(255 255 255 / .07) 0 1px, transparent 1px 18px),
+    linear-gradient(140deg, hsl(var(--h) 50% 40%), hsl(calc(var(--h) + 38) 56% 22%)); }
+.art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ini { position: absolute; inset: 0; display: grid; place-items: center; font: 700 clamp(48px, 9vw, 84px)/1 var(--display); color: rgb(255 255 255 / .3); }
+.card { border-top: 4px solid var(--vc); }
+.tags2 { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font: 500 11px/1.5 var(--mono); color: var(--ink-2); }
+.tags2 .vtag { padding: 0 7px; border-radius: 99px; background: var(--vc); color: var(--on-v); font-weight: 600; }
+.tags2 .xt { padding: 0 6px; border: 1px solid var(--ink-2); border-radius: 99px; letter-spacing: .04em; }
+.body { display: grid; gap: 8px; padding: 10px 12px 12px; }
+.t { margin: 0; min-height: 2.6em; font-weight: 700; font-size: 14px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.t .sub { font-weight: 400; font-size: 12px; color: var(--ink-2); }
+.stats { display: grid; gap: 6px; padding-top: 8px; border-top: 1px dashed var(--line); }
+.cst { display: grid; line-height: 1; }
+.cst small { font: 500 10px/1 var(--mono); color: var(--ink-2); letter-spacing: .06em; margin-bottom: 3px; }
+.cst b { font: 700 28px/1 var(--display); font-variant-numeric: tabular-nums; }
+.mini { min-width: 0; text-align: left; font: 400 11px/1.5 var(--mono); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.mini span { display: block; white-space: nowrap; }
+.mini .row2 { display: flex; justify-content: space-between; gap: 8px; }
+.mini .row2 b { font-weight: 400; }
+
+/* table */
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { width: 100%; border-collapse: collapse; min-width: 720px; font-variant-numeric: tabular-nums; }
+th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font: 500 11px/1.2 var(--mono); letter-spacing: .06em; color: var(--ink-2); background: var(--surface-2); }
+th button { border: 0; background: none; padding: 0; font: inherit; letter-spacing: inherit; color: inherit; }
+th[aria-sort="ascending"] button::after { content: " ▲"; } th[aria-sort="descending"] button::after { content: " ▼"; }
+th[aria-sort] { color: var(--ink); }
+td.num, th.num { text-align: right; }
+td.nm { white-space: normal; min-width: 220px; overflow-wrap: anywhere; }
+td.nm button { border: 0; background: none; padding: 0; text-align: left; font-weight: 700; }
+td.nm button:hover { text-decoration: underline; }
+td.nm .sub { display: block; font-weight: 400; font-size: 12px; color: var(--ink-2); }
+tr.row { cursor: pointer; } tr.row:hover td { background: var(--bg); }
+tr:last-child td { border-bottom: 0; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; background: var(--vc); }
+.cn { font: 700 16px/1 var(--display); }
+
+.empty { display: grid; justify-items: center; gap: 10px; padding: 48px 16px; color: var(--ink-2); text-align: center; background: var(--surface); border: 1px dashed var(--line); border-radius: 10px; }
+.empty button { height: 34px; padding: 0 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+.foot { color: var(--ink-2); font-size: 12px; }
+
+/* detail */
+.veil { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px; background: rgb(8 10 20 / .62); }
+.panel { --vc: var(--ink-2); position: relative; width: min(860px, 100%); max-height: calc(100% - 8px); overflow: auto; display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 22px; padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+.panel[data-v="1"] { --vc: var(--v1); } .panel[data-v="2"] { --vc: var(--v2); } .panel[data-v="3"] { --vc: var(--v3); }
+.panel .art { border-radius: 10px; }
+.panel .ini { font-size: clamp(72px, 14vw, 120px); }
+.x-btn { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; background: var(--bg); font-size: 16px; line-height: 1; }
+.info { display: grid; align-content: start; gap: 14px; min-width: 0; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; padding-right: 44px; }
+.tag { padding: 2px 9px; border-radius: 99px; font: 600 12px/1.6 var(--mono); background: var(--vc); color: var(--on-v); }
+.tag.o { background: transparent; color: var(--ink); border: 1px solid var(--ink-2); }
+.info h2 { margin: 0; font: 700 clamp(22px, 4vw, 30px)/1.2 var(--display); overflow-wrap: anywhere; text-wrap: balance; }
+.info h2 + p { margin: -8px 0 0; color: var(--ink-2); overflow-wrap: anywhere; }
+.big { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+.big .cst b { font-size: 56px; }
+.big .cst small { font-size: 11px; }
+.big .rank { color: var(--ink-2); font: 400 12px/1.5 var(--mono); padding-bottom: 6px; }
+dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px; margin: 0; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+dl div { padding: 9px 12px; background: var(--surface); min-width: 0; }
+dt { font: 500 11px/1.3 var(--mono); letter-spacing: .06em; color: var(--ink-2); }
+dd { margin: 2px 0 0; font: 500 16px/1.3 var(--mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+dd small { font-size: 12px; color: var(--ink-2); }
+.scale h3 { margin: 0 0 6px; font: 500 11px/1.3 var(--mono); letter-spacing: .06em; color: var(--ink-2); font-weight: 500; }
+.track { position: relative; height: 40px; border-bottom: 1px solid var(--ink-2); }
+.track i { position: absolute; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--vc); opacity: .55; }
+.track i[data-v="1"] { --vc: var(--v1); } .track i[data-v="2"] { --vc: var(--v2); } .track i[data-v="3"] { --vc: var(--v3); }
+.track i.me { opacity: 1; width: 12px; height: 12px; margin-left: -6px; box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); z-index: 2; }
+.ticks { position: relative; height: 18px; font: 400 10px/18px var(--mono); color: var(--ink-2); }
+.ticks span { position: absolute; transform: translateX(-50%); }
+.nav { display: flex; justify-content: space-between; gap: 8px; }
+.nav button { height: 34px; padding: 0 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+.nav button:disabled { opacity: .4; cursor: default; }
+
+@media (max-width: 640px) {
+  .panel { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+  .panel .art { max-width: 260px; }
+  .big .cst b { font-size: 48px; }
+}
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="head">
+    <div>
+      <p class="eyebrow" id="edition"></p>
+      <h1>譜面資料庫</h1>
+    </div>
+    <div class="vers" id="vers" role="group" aria-label="依版本篩選"></div>
+  </header>
+
+  <div class="bar" role="search">
+    <input class="search" id="q" type="search" placeholder="搜尋曲名" aria-label="搜尋曲名" autocomplete="off">
+    <div class="seg" id="kind" role="group" aria-label="篇別">
+      <button type="button" data-k="all" aria-pressed="true">全部</button>
+      <button type="button" data-k="Master" aria-pressed="false">Master</button>
+      <button type="button" data-k="Extra" aria-pressed="false">Extra</button>
+    </div>
+    <select class="sel" id="lvl" aria-label="難易度"></select>
+    <select class="sel" id="sort" aria-label="排序"></select>
+    <div class="seg" id="view" role="group" aria-label="檢視方式">
+      <button type="button" data-m="grid" aria-pressed="true">卡片</button>
+      <button type="button" data-m="table" aria-pressed="false">表格</button>
+    </div>
+  </div>
+
+  <div class="meta"><span id="count"></span><span>定數為估計值</span></div>
+  <main id="out"></main>
+  <p class="foot" id="foot"></p>
+</div>
+
+<div class="veil" id="veil" hidden>
+  <div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="dtitle"></div>
+</div>
+
+<script>
+const SONGS = [{"id":"linked-tune","title":"Linked Tune","sub":"","full":"Linked Tune","ver":1,"kind":"Master","bpm":"136","meter":"","bpmLo":136.0,"bpmHi":136.0,"level":13,"constant":13.0,"sec":175,"dur":"2:55","notes":619},{"id":"kairos","title":"Kairos","sub":"","full":"Kairos","ver":1,"kind":"Master","bpm":"200","meter":"","bpmLo":200.0,"bpmHi":200.0,"level":13,"constant":13.6,"sec":132,"dur":"2:12","notes":554},{"id":"solitary-dream","title":"Solitary Dream","sub":"虚空の夢","full":"Solitary Dream(虚空の夢)","ver":3,"kind":"Master","bpm":"162","meter":"","bpmLo":162.0,"bpmHi":162.0,"level":13,"constant":13.9,"sec":173,"dur":"2:53","notes":777},{"id":"soteria","title":"ソテリア","sub":"soteria","full":"ソテリア(soteria)","ver":1,"kind":"Master","bpm":"160","meter":"","bpmLo":160.0,"bpmHi":160.0,"level":14,"constant":14.2,"sec":151,"dur":"2:31","notes":730},{"id":"vibes-2k20","title":"Vibes 2k20","sub":"","full":"Vibes 2k20","ver":1,"kind":"Master","bpm":"149","meter":"","bpmLo":149.0,"bpmHi":149.0,"level":14,"constant":14.6,"sec":152,"dur":"2:32","notes":786},{"id":"hemisphere","title":"Hemisphere","sub":"","full":"Hemisphere","ver":1,"kind":"Master","bpm":"193","meter":"","bpmLo":193.0,"bpmHi":193.0,"level":15,"constant":15.0,"sec":127,"dur":"2:07","notes":667},{"id":"heat-abnormal","title":"heat abnormal","sub":"熱異常","full":"heat abnormal(熱異常)","ver":1,"kind":"Master","bpm":"183","meter":"","bpmLo":183.0,"bpmHi":183.0,"level":15,"constant":15.1,"sec":124,"dur":"2:04","notes":884},{"id":"null-override","title":"Null Override","sub":"","full":"Null Override","ver":1,"kind":"Master","bpm":"207","meter":"","bpmLo":207.0,"bpmHi":207.0,"level":15,"constant":15.2,"sec":150,"dur":"2:30","notes":1000},{"id":"distant-call","title":"distant call","sub":"","full":"distant call","ver":2,"kind":"Master","bpm":"168","meter":"","bpmLo":168.0,"bpmHi":168.0,"level":15,"constant":15.4,"sec":180,"dur":"3:00","notes":1350},{"id":"quadruplicity","title":"Quadruplicity","sub":"","full":"Quadruplicity","ver":2,"kind":"Master","bpm":"157","meter":"","bpmLo":157.0,"bpmHi":157.0,"level":15,"constant":15.6,"sec":153,"dur":"2:33","notes":941},{"id":"sense-of-wonder","title":"Sense of wonder","sub":"","full":"Sense of wonder","ver":2,"kind":"Master","bpm":"178","meter":"","bpmLo":178.0,"bpmHi":178.0,"level":15,"constant":15.8,"sec":192,"dur":"3:12","notes":1102},{"id":"technopolis-2085","title":"TECHNOPOLIS 2085","sub":"","full":"TECHNOPOLIS 2085","ver":1,"kind":"Master","bpm":"134","meter":"","bpmLo":134.0,"bpmHi":134.0,"level":15,"constant":15.9,"sec":142,"dur":"2:22","notes":614},{"id":"way-home","title":"way home","sub":"","full":"way home","ver":2,"kind":"Master","bpm":"164.84","meter":"","bpmLo":164.84,"bpmHi":164.84,"level":16,"constant":16.0,"sec":117,"dur":"1:57","notes":830},{"id":"axium-divergence","title":"Axium Divergence","sub":"","full":"Axium Divergence","ver":1,"kind":"Master","bpm":"90 – 180","meter":"","bpmLo":90.0,"bpmHi":180.0,"level":16,"constant":16.2,"sec":159,"dur":"2:39","notes":825},{"id":"labyrinthox","title":"LABYRINTHOX","sub":"","full":"LABYRINTHOX","ver":2,"kind":"Master","bpm":"200","meter":"","bpmLo":200.0,"bpmHi":200.0,"level":16,"constant":16.4,"sec":146,"dur":"2:26","notes":955},{"id":"xilx","title":"XLIX","sub":"","full":"XLIX","ver":2,"kind":"Master","bpm":"210","meter":"","bpmLo":210.0,"bpmHi":210.0,"level":16,"constant":16.5,"sec":139,"dur":"2:19","notes":1083},{"id":"hydra","title":"Hydra","sub":"","full":"Hydra","ver":1,"kind":"Master","bpm":"160","meter":"","bpmLo":160.0,"bpmHi":160.0,"level":16,"constant":16.6,"sec":153,"dur":"2:33","notes":1081},{"id":"7-wonders","title":"7 Wonders","sub":"","full":"7 Wonders","ver":1,"kind":"Master","bpm":"168","meter":"7/4、7/8","bpmLo":168.0,"bpmHi":168.0,"level":16,"constant":16.7,"sec":150,"dur":"2:30","notes":1007},{"id":"cybernetic-vampire","title":"Cybernetic Vampire","sub":"","full":"Cybernetic Vampire","ver":1,"kind":"Master","bpm":"110","meter":"","bpmLo":110.0,"bpmHi":110.0,"level":16,"constant":16.7,"sec":148,"dur":"2:28","notes":700},{"id":"nox-silva","title":"Nox Silva","sub":"","full":"Nox Silva","ver":3,"kind":"Master","bpm":"180","meter":"","bpmLo":180.0,"bpmHi":180.0,"level":16,"constant":16.7,"sec":164,"dur":"2:44","notes":1337},{"id":"ternion","title":"Ternion","sub":"","full":"Ternion","ver":3,"kind":"Master","bpm":"60 – 162","meter":"","bpmLo":60.0,"bpmHi":162.0,"level":16,"constant":16.8,"sec":148,"dur":"2:28","notes":980},{"id":"never-say-goodbye","title":"Never Say Goodbye","sub":"","full":"Never Say Goodbye","ver":3,"kind":"Master","bpm":"200","meter":"","bpmLo":200.0,"bpmHi":200.0,"level":16,"constant":16.9,"sec":170,"dur":"2:50","notes":1444},{"id":"altra-vita","title":"敗北のAltra Vita","sub":"","full":"敗北のAltra Vita","ver":2,"kind":"Master","bpm":"115.5 – 231","meter":"","bpmLo":115.5,"bpmHi":231.0,"level":17,"constant":17.1,"sec":182,"dur":"3:02","notes":1404},{"id":"dread-area","title":"DREAD AREA","sub":"","full":"DREAD AREA","ver":3,"kind":"Master","bpm":"205","meter":"","bpmLo":205.0,"bpmHi":205.0,"level":17,"constant":17.4,"sec":151,"dur":"2:31","notes":1222},{"id":"endtime","title":"Endtime","sub":"","full":"Endtime","ver":1,"kind":"Master","bpm":"180","meter":"","bpmLo":180.0,"bpmHi":180.0,"level":17,"constant":17.7,"sec":136,"dur":"2:16","notes":902},{"id":"bloom-in-two","title":"Bloom In Two","sub":"","full":"Bloom In Two","ver":2,"kind":"Master","bpm":"217","meter":"","bpmLo":217.0,"bpmHi":217.0,"level":17,"constant":17.9,"sec":168,"dur":"2:48","notes":1374},{"id":"gessou","title":"Gessou","sub":"月葬","full":"Gessou(月葬)","ver":1,"kind":"Master","bpm":"190","meter":"","bpmLo":190.0,"bpmHi":190.0,"level":17,"constant":17.9,"sec":168,"dur":"2:48","notes":1123},{"id":"cataclysm-cry","title":"Cataclysm Cry","sub":"","full":"Cataclysm Cry","ver":3,"kind":"Master","bpm":"180","meter":"1/4、3/4、5/4","bpmLo":180.0,"bpmHi":180.0,"level":18,"constant":18.0,"sec":176,"dur":"2:56","notes":1304},{"id":"toy-rhapsody-finale","title":"toy-rhapsody-finale","sub":"玩具狂奏曲 -終焉-","full":"toy-rhapsody-finale-(玩具狂奏曲 -終焉-)","ver":2,"kind":"Master","bpm":"130","meter":"6/8","bpmLo":130.0,"bpmHi":130.0,"level":18,"constant":18.2,"sec":156,"dur":"2:36","notes":1246},{"id":"go-run-sh1ne","title":"Go! Run! Sh1ne!","sub":"殿ッ！？ご乱心！？","full":"Go! Run! Sh1ne!(殿ッ！？ご乱心！？)","ver":3,"kind":"Master","bpm":"200 – 1000","meter":"6/8","bpmLo":200.0,"bpmHi":1000.0,"level":18,"constant":18.4,"sec":132,"dur":"2:12","notes":1267},{"id":"super-symmetry","title":"[ Super symmetry ]","sub":"","full":"[ Super symmetry ]","ver":3,"kind":"Master","bpm":"210","meter":"","bpmLo":210.0,"bpmHi":210.0,"level":18,"constant":18.5,"sec":165,"dur":"2:45","notes":1324},{"id":"rainshower","title":"rainshower","sub":"驟雨の狭間","full":"rainshower (驟雨の狭間)","ver":2,"kind":"Master","bpm":"174","meter":"","bpmLo":174.0,"bpmHi":174.0,"level":18,"constant":18.6,"sec":226,"dur":"3:46","notes":1416},{"id":"solarorbit-connected-with-the-espabrothe","title":"SolarOrbit-Connected with the Espabrother-","sub":"","full":"SolarOrbit-Connected with the Espabrother-","ver":1,"kind":"Master","bpm":"110 – 440","meter":"","bpmLo":110.0,"bpmHi":440.0,"level":18,"constant":18.7,"sec":163,"dur":"2:43","notes":1382},{"id":"hatsune-concerto-no-01-suisei","title":"Hatsune Concerto No.01 \"suisei\"","sub":"初音狂奏曲第01番「彗惺」","full":"Hatsune Concerto No.01 \"suisei\"  ( 初音狂奏曲第01番「彗惺」)","ver":2,"kind":"Master","bpm":"220","meter":"","bpmLo":220.0,"bpmHi":220.0,"level":18,"constant":18.9,"sec":197,"dur":"3:17","notes":2026},{"id":"ogyarinizer","title":"Ogyarinizer","sub":"","full":"Ogyarinizer","ver":1,"kind":"Master","bpm":"155 – 310","meter":"","bpmLo":155.0,"bpmHi":310.0,"level":19,"constant":19.0,"sec":130,"dur":"2:10","notes":1471},{"id":"riven-pilgrimage","title":"Riven Pilgrimage","sub":"","full":"Riven Pilgrimage","ver":3,"kind":"Master","bpm":"180","meter":"","bpmLo":180.0,"bpmHi":180.0,"level":19,"constant":19.2,"sec":162,"dur":"2:42","notes":1262},{"id":"phantom-crisis","title":"Phantom Crisis","sub":"","full":"Phantom Crisis","ver":1,"kind":"Master","bpm":"235","meter":"","bpmLo":235.0,"bpmHi":235.0,"level":19,"constant":19.4,"sec":151,"dur":"2:31","notes":1391},{"id":"antikythera","title":"antikythera","sub":"","full":"antikythera","ver":2,"kind":"Master","bpm":"220","meter":"","bpmLo":220.0,"bpmHi":220.0,"level":19,"constant":19.6,"sec":170,"dur":"2:50","notes":1769},{"id":"0-0000034","title":"0.0000034","sub":"","full":"0.0000034","ver":1,"kind":"Master","bpm":"239","meter":"","bpmLo":239.0,"bpmHi":239.0,"level":19,"constant":19.9,"sec":175,"dur":"2:55","notes":1434},{"id":"supernova","title":"SUPERNOVA","sub":"","full":"SUPERNOVA","ver":2,"kind":"Master","bpm":"168 – 597.32","meter":"","bpmLo":168.0,"bpmHi":597.32,"level":20,"constant":20.0,"sec":210,"dur":"3:30","notes":1888},{"id":"if-infinity","title":"If=Infinity","sub":"","full":"If=Infinity","ver":2,"kind":"Master","bpm":"203","meter":"","bpmLo":203.0,"bpmHi":203.0,"level":20,"constant":20.1,"sec":410,"dur":"6:50","notes":3666},{"id":"un","title":"un","sub":"","full":"un","ver":3,"kind":"Master","bpm":"188","meter":"","bpmLo":188.0,"bpmHi":188.0,"level":20,"constant":20.2,"sec":164,"dur":"2:44","notes":1444},{"id":"entrance-to-the-chaos","title":"Entrance to the Chaos","sub":"","full":"Entrance to the Chaos","ver":3,"kind":"Master","bpm":"207","meter":"","bpmLo":207.0,"bpmHi":207.0,"level":20,"constant":20.3,"sec":145,"dur":"2:25","notes":1249},{"id":"xaleid-scopix","title":"Xaleid ◆ scopiX","sub":"","full":"Xaleid ◆ scopiX","ver":1,"kind":"Master","bpm":"140 – 240","meter":"","bpmLo":140.0,"bpmHi":240.0,"level":20,"constant":20.4,"sec":268,"dur":"4:28","notes":2145},{"id":"younithm","title":"YOUNITHM","sub":"","full":"YOUNITHM","ver":1,"kind":"Master","bpm":"260","meter":"","bpmLo":260.0,"bpmHi":260.0,"level":20,"constant":20.5,"sec":180,"dur":"3:00","notes":1444},{"id":"exoplanetary-mirage","title":"Exoplanetary Mirage","sub":"","full":"Exoplanetary Mirage","ver":3,"kind":"Master","bpm":"192","meter":"","bpmLo":192.0,"bpmHi":192.0,"level":20,"constant":20.6,"sec":177,"dur":"2:57","notes":1626},{"id":"kaijuu-ni-naritai","title":"Kaijuu Ni Naritai","sub":"怪獣になりたい","full":"Kaijuu Ni Naritai(怪獣になりたい)","ver":1,"kind":"Master","bpm":"220","meter":"","bpmLo":220.0,"bpmHi":220.0,"level":20,"constant":20.7,"sec":127,"dur":"2:07","notes":1200},{"id":"hate","title":"Hate","sub":"ハテ","full":"Hate(ハテ)","ver":3,"kind":"Master","bpm":"220.5","meter":"7/4","bpmLo":220.5,"bpmHi":220.5,"level":20,"constant":20.8,"sec":175,"dur":"2:55","notes":1500},{"id":"once-forgotten-nothing-remains","title":"Once Forgotten, Nothing Remains","sub":"","full":"Once Forgotten, Nothing Remains","ver":2,"kind":"Master","bpm":"63 – 252","meter":"","bpmLo":63.0,"bpmHi":252.0,"level":20,"constant":20.9,"sec":600,"dur":"10:00","notes":5505},{"id":"melodique","title":"Melodiniq","sub":"","full":"Melodiniq","ver":1,"kind":"Master","bpm":"193 – 240","meter":"","bpmLo":193.0,"bpmHi":240.0,"level":21,"constant":21.0,"sec":183,"dur":"3:03","notes":1761},{"id":"acta-est-fabula-plaudite","title":"acta est fabula,plaudite.","sub":"","full":"acta est fabula,plaudite.","ver":2,"kind":"Master","bpm":"100 – 270","meter":"","bpmLo":100.0,"bpmHi":270.0,"level":21,"constant":21.0,"sec":840,"dur":"14:00","notes":8553},{"id":"un-extra","title":"un","sub":"","full":"un","ver":3,"kind":"Extra","bpm":"180","meter":"","bpmLo":180.0,"bpmHi":180.0,"level":18,"constant":18.6,"sec":164,"dur":"2:44","notes":1379},{"id":"nox-silva-extra","title":"Nox Silva","sub":"","full":"Nox Silva","ver":3,"kind":"Extra","bpm":"180","meter":"","bpmLo":180.0,"bpmHi":180.0,"level":19,"constant":18.7,"sec":164,"dur":"2:44","notes":1540},{"id":"dread-area-extra","title":"DREAD AREA","sub":"","full":"DREAD AREA","ver":3,"kind":"Extra","bpm":"205","meter":"","bpmLo":205.0,"bpmHi":205.0,"level":18,"constant":18.8,"sec":151,"dur":"2:31","notes":1164}];
+const EDITION = "定數表 Ver.3.3.0";
+const VNAME = { 1: "Ver.1", 2: "Ver.2", 3: "Ver.3" };
+const HUE = { 1: 322, 2: 199, 3: 150 };
+const SORTS = [
+  ["constant-asc", "定數 低 → 高"], ["constant-desc", "定數 高 → 低"],
+  ["notes-desc", "物量 多 → 少"], ["notes-asc", "物量 少 → 多"],
+  ["bpm-desc", "BPM 高 → 低"], ["bpm-asc", "BPM 低 → 高"],
+  ["sec-desc", "時長 長 → 短"], ["sec-asc", "時長 短 → 長"],
+  ["title-asc", "曲名 A → Z"], ["title-desc", "曲名 Z → A"]
+];
+const KEYFN = { constant: s => s.constant, notes: s => s.notes, bpm: s => s.bpmHi, sec: s => s.sec, title: s => s.title.toLowerCase() };
+const S = { ver: 0, kind: "all", level: "all", key: "constant", dir: 1, q: "", view: "grid" };
+try { const v = localStorage.getItem("chartdb-view"); if (v === "grid" || v === "table") S.view = v; } catch (e) {}
+
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmtC = n => n.toFixed(1);
+const fmtN = n => n.toLocaleString("en-US");
+const byId = Object.fromEntries(SONGS.map(s => [s.id, s]));
+const rankOf = Object.fromEntries(SONGS.map(s => [s.id, 1 + SONGS.filter(o => o.constant > s.constant).length]));
+const hash = t => { let h = 0; for (const c of t) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; };
+const hue = s => HUE[s.ver] + (hash(s.id) % 41) - 20;
+const initial = s => (s.title.replace(/^[^A-Za-z0-9぀-ヿ一-鿿]+/, "")[0] || "?").toUpperCase();
+const bpmLine = s => s.bpm + (s.meter ? ` (${s.meter})` : "");
+
+function artHtml(s) {
+  return `<div class="art" style="--h:${hue(s)}"><span class="ini" aria-hidden="true">${esc(initial(s))}</span><img src="art/${s.id}.webp" alt="${esc(s.title)} 曲繪" loading="lazy" decoding="async"></div>`;
+}
+document.addEventListener("error", e => { if (e.target.tagName === "IMG" && e.target.closest(".art")) e.target.remove(); }, true);
+
+function visible() {
+  const q = S.q.trim().toLowerCase();
+  const f = KEYFN[S.key];
+  return SONGS.filter(s =>
+    (!S.ver || s.ver === S.ver) && (S.kind === "all" || s.kind === S.kind) &&
+    (S.level === "all" || s.level === +S.level) &&
+    (!q || (s.full + " " + s.title + " " + s.sub).toLowerCase().includes(q))
+  ).sort((a, b) => {
+    const x = f(a), y = f(b);
+    const d = typeof x === "string" ? x.localeCompare(y) : x - y;
+    return d * S.dir || a.constant - b.constant || a.ver - b.ver || a.title.localeCompare(b.title);
+  });
+}
+
+function cardHtml(s) {
+  return `<button type="button" class="card" data-v="${s.ver}" data-id="${s.id}">
+    <div class="art-wrap">${artHtml(s)}</div>
+    <div class="body">
+      <div class="tags2"><span class="vtag">${VNAME[s.ver]}</span><span>Lv.${s.level}</span>${s.kind === "Extra" ? "<span class=\"xt\">EXTRA</span>" : ""}</div>
+      <p class="t">${esc(s.title)}${s.sub ? ` <span class="sub">${esc(s.sub)}</span>` : ""}</p>
+      <div class="stats">
+        <div class="cst"><small>定數</small><b>${fmtC(s.constant)}</b></div>
+        <div class="mini"><span>${esc(s.bpm)} BPM</span><span class="row2"><b>${s.dur}</b><b>${fmtN(s.notes)} notes</b></span></div>
+      </div>
+    </div>
+  </button>`;
+}
+function render() {
+  const list = visible();
+  $("count").textContent = `顯示 ${list.length} / ${SONGS.length} 筆`;
+  const out = $("out");
+  if (!list.length) {
+    out.innerHTML = `<div class="empty"><p>沒有符合條件的譜面。</p><button type="button" id="reset">清除篩選</button></div>`;
+    $("reset").onclick = () => { Object.assign(S, { ver: 0, kind: "all", level: "all", q: "" }); $("q").value = ""; sync(); render(); };
+    return;
+  }
+  if (S.view === "grid") {
+    out.innerHTML = `<div class="grid">${list.map(cardHtml).join("")}</div>`;
+  } else {
+    const th = (k, label, cls) => `<th class="${cls || ""}" ${S.key === k ? `aria-sort="${S.dir > 0 ? "ascending" : "descending"}"` : ""}><button type="button" data-sort="${k}">${label}</button></th>`;
+    out.innerHTML = `<div class="tablewrap"><table><thead><tr>${th("title", "曲名")}<th>版本</th><th class="num">難易度</th>${th("constant", "定數", "num")}${th("bpm", "BPM", "num")}${th("sec", "時長", "num")}${th("notes", "物量", "num")}</tr></thead><tbody>${
+      list.map(s => `<tr class="row" data-v="${s.ver}" data-id="${s.id}"><td class="nm"><button type="button" data-open="${s.id}">${esc(s.title)}</button>${s.sub ? `<span class="sub">${esc(s.sub)}</span>` : ""}</td><td><span class="dot"></span>${VNAME[s.ver]}${s.kind === "Extra" ? " · Extra" : ""}</td><td class="num">${s.level}</td><td class="num cn">${fmtC(s.constant)}</td><td class="num">${esc(s.bpm)}</td><td class="num">${s.dur}</td><td class="num">${fmtN(s.notes)}</td></tr>`).join("")
+    }</tbody></table></div>`;
+  }
+}
+
+function sync() {
+  document.querySelectorAll("#vers .ver").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.v === S.ver)));
+  document.querySelectorAll("#kind button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.k === S.kind)));
+  document.querySelectorAll("#view button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.m === S.view)));
+  $("lvl").value = S.level;
+  $("sort").value = `${S.key}-${S.dir > 0 ? "asc" : "desc"}`;
+}
+
+/* detail panel */
+let current = null, opener = null;
+function scaleHtml(s) {
+  const lo = 13, hi = 21, pos = c => `calc(8px + (100% - 16px) * ${(c - lo) / (hi - lo)})`;
+  const seen = {};
+  const dots = SONGS.map(o => {
+    const k = o.constant.toFixed(1), n = seen[k] = (seen[k] || 0) + 1;
+    return `<i data-v="${o.ver}" class="${o.id === s.id ? "me" : ""}" style="left:${pos(o.constant)};bottom:${4 + (n - 1) * 10}px"></i>`;
+  }).join("");
+  const ticks = []; for (let i = lo; i <= hi; i++) ticks.push(`<span style="left:${pos(i)}">${i}</span>`);
+  return `<div class="scale"><h3>全曲中的定數位置</h3><div class="track">${dots}</div><div class="ticks">${ticks.join("")}</div></div>`;
+}
+function open(id, from) {
+  const s = byId[id]; if (!s) return;
+  current = id; if (from) opener = from;
+  const list = visible(), i = list.findIndex(o => o.id === id);
+  const prev = list[i - 1], next = list[i + 1];
+  const p = $("panel"); p.dataset.v = s.ver;
+  p.innerHTML = `<button type="button" class="x-btn" id="close" aria-label="關閉">✕</button>
+    <div>${artHtml(s)}</div>
+    <div class="info">
+      <div class="tags"><span class="tag">${VNAME[s.ver]}</span><span class="tag o">${s.kind}</span><span class="tag o">Lv.${s.level}</span></div>
+      <h2 id="dtitle">${esc(s.title)}</h2>${s.sub ? `<p>${esc(s.sub)}</p>` : ""}
+      <div class="big"><div class="cst"><small>定數（估計）</small><b>${fmtC(s.constant)}</b></div><span class="rank">全曲第 ${rankOf[s.id]} / ${SONGS.length}</span></div>
+      <dl>
+        <div><dt>BPM</dt><dd>${esc(s.bpm)}${s.meter ? ` <small>(${esc(s.meter)})</small>` : ""}</dd></div>
+        <div><dt>遊玩時長</dt><dd>${s.dur}</dd></div>
+        <div><dt>物量</dt><dd>${fmtN(s.notes)}</dd></div>
+        <div><dt>平均物量密度</dt><dd>${(s.notes / s.sec).toFixed(1)} <small>物/秒</small></dd></div>
+      </dl>
+      ${scaleHtml(s)}
+      <div class="nav"><button type="button" id="prev" ${prev ? "" : "disabled"}>← ${prev ? esc(prev.title.slice(0, 18)) : "上一首"}</button><button type="button" id="next" ${next ? "" : "disabled"}>${next ? esc(next.title.slice(0, 18)) : "下一首"} →</button></div>
+    </div>`;
+  $("veil").hidden = false;
+  $("close").focus();
+  $("close").onclick = close;
+  if (prev) $("prev").onclick = () => open(prev.id);
+  if (next) $("next").onclick = () => open(next.id);
+  try { history.replaceState(null, "", "#" + id); } catch (e) {}
+}
+function close() {
+  $("veil").hidden = true; current = null;
+  try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  if (opener && document.contains(opener)) opener.focus(); opener = null;
+}
+
+/* wiring */
+$("edition").textContent = EDITION;
+$("foot").textContent = `${EDITION} · 共 ${SONGS.length} 筆（Master 篇 ${SONGS.filter(s => s.kind === "Master").length}、Extra 篇 ${SONGS.filter(s => s.kind === "Extra").length}）`;
+$("vers").innerHTML = [1, 2, 3].map(v => {
+  const l = SONGS.filter(s => s.ver === v), cs = l.map(s => s.constant);
+  return `<button type="button" class="ver" data-v="${v}" aria-pressed="false"><b>${VNAME[v]}</b><span>${l.length} 首 · ${fmtC(Math.min(...cs))}–${fmtC(Math.max(...cs))}</span></button>`;
+}).join("");
+$("lvl").innerHTML = `<option value="all">全部難易度</option>` + [...new Set(SONGS.map(s => s.level))].sort((a, b) => a - b).map(l => `<option value="${l}">Lv.${l}</option>`).join("");
+$("sort").innerHTML = SORTS.map(([v, t]) => `<option value="${v}">${t}</option>`).join("");
+
+$("vers").addEventListener("click", e => { const b = e.target.closest(".ver"); if (!b) return; const v = +b.dataset.v; S.ver = S.ver === v ? 0 : v; sync(); render(); });
+$("kind").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S.kind = b.dataset.k; sync(); render(); });
+$("view").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S.view = b.dataset.m; try { localStorage.setItem("chartdb-view", S.view); } catch (x) {} sync(); render(); });
+$("lvl").addEventListener("change", e => { S.level = e.target.value; render(); });
+$("sort").addEventListener("change", e => { const [k, d] = e.target.value.split("-"); S.key = k; S.dir = d === "asc" ? 1 : -1; sync(); render(); });
+$("q").addEventListener("input", e => { S.q = e.target.value; render(); });
+$("out").addEventListener("click", e => {
+  const h = e.target.closest("[data-sort]");
+  if (h) { const k = h.dataset.sort; if (S.key === k) S.dir = -S.dir; else { S.key = k; S.dir = k === "title" ? 1 : -1; } sync(); render(); return; }
+  const c = e.target.closest("[data-id]");
+  if (c) open(c.dataset.id, c.querySelector("button") || c);
+});
+$("veil").addEventListener("click", e => { if (e.target === $("veil")) close(); });
+document.addEventListener("keydown", e => {
+  if ($("veil").hidden) return;
+  if (e.key === "Escape") close();
+  else if (e.key === "ArrowLeft" && $("prev") && !$("prev").disabled) $("prev").click();
+  else if (e.key === "ArrowRight" && $("next") && !$("next").disabled) $("next").click();
+});
+window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (byId[id] && id !== current) open(id); });
+
+sync(); render();
+{ const id = location.hash.slice(1); if (byId[id]) open(id); }
+</script>
+
+</body>
+</html>
