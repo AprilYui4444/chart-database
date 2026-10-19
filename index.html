@@ -83,6 +83,57 @@ h1 { margin: 6px 0 0; font: 700 clamp(30px, 6vw, 46px)/1.05 var(--display); lett
 .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .ini { position: absolute; inset: 0; display: grid; place-items: center; font: 700 clamp(48px, 9vw, 84px)/1 var(--display); color: rgb(255 255 255 / .3); }
 .card { border-top: 4px solid var(--vc); }
+.lockmsg { margin: 14px 0 10px; color: var(--ink-2); font-size: 14px; }
+.unlock { height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid var(--ink-2); background: var(--surface); font-weight: 700; }
+.lockicon { position: absolute; left: 50%; top: 50%; width: 42%; aspect-ratio: 1; margin: -21% 0 0 -21%; color: #eaf6ff; }
+.lockicon svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.lockicon .g1 { color: #00f0ff; mix-blend-mode: screen; transform: translate(-3%, 0); animation: gl1 2.6s steps(1) infinite; }
+.lockicon .g2 { color: #ff2bd6; mix-blend-mode: screen; transform: translate(3%, 0); animation: gl2 2.6s steps(1) infinite; }
+.lockicon .base { animation: glbase 2.6s steps(1) infinite; }
+.lockicon .shackle { transform-origin: 16px 11px; transition: transform .35s steps(4); }
+.lockicon.open .base { color: #9bffc0; }
+.lockicon.open .shackle { transform: translateY(-3px) rotate(-28deg); }
+.lockicon.open { animation: glburst .75s steps(1); }
+.lockicon.nope { animation: glburst .45s steps(1); }
+.lockicon.nope .base { color: #ff6b6b; }
+.lockicon.slam { animation: glburst .4s steps(1); }
+@keyframes gl1 { 0% { transform: translate(-3%, 0); clip-path: inset(0); } 8% { transform: translate(-12%, 0); clip-path: inset(8% 0 58% 0); } 10% { transform: translate(8%, 0); clip-path: inset(62% 0 6% 0); } 12% { transform: translate(-3%, 0); clip-path: inset(0); } 41% { transform: translate(-9%, 2%); clip-path: inset(30% 0 38% 0); } 44% { transform: translate(-3%, 0); clip-path: inset(0); } 72% { transform: translate(14%, -2%); clip-path: inset(0 0 72% 0); } 75% { transform: translate(-3%, 0); clip-path: inset(0); } }
+@keyframes gl2 { 0% { transform: translate(3%, 0); clip-path: inset(0); } 9% { transform: translate(12%, 0); clip-path: inset(50% 0 20% 0); } 11% { transform: translate(-8%, 0); clip-path: inset(5% 0 70% 0); } 13% { transform: translate(3%, 0); clip-path: inset(0); } 42% { transform: translate(9%, -2%); clip-path: inset(55% 0 12% 0); } 45% { transform: translate(3%, 0); clip-path: inset(0); } 73% { transform: translate(-14%, 2%); clip-path: inset(68% 0 0 0); } 76% { transform: translate(3%, 0); clip-path: inset(0); } }
+@keyframes glbase { 0% { transform: none; opacity: 1; } 9% { transform: translate(4%, 0); opacity: .55; } 10% { transform: translate(-3%, 1%); opacity: 1; } 11% { transform: none; } 41% { transform: translate(-5%, 0); opacity: .35; } 43% { transform: none; opacity: 1; } 72% { transform: skewX(14deg) translate(3%, 0); } 74% { transform: none; } 90% { opacity: .6; } 91% { opacity: 1; } }
+@keyframes glburst { 0% { transform: translate(-8%, 3%) skewX(-10deg); } 20% { transform: translate(7%, -3%) skewX(12deg); } 40% { transform: translate(-5%, 1%); } 60% { transform: translate(6%, 2%) skewX(-8deg); } 80% { transform: translate(-3%, -1%); } 100% { transform: none; } }
+.panel.reveal .art { animation: revealart 1s steps(1) both; }
+.panel.reveal dl > div, .panel.reveal .big { animation: revealin .6s steps(6) both; animation-delay: calc(var(--i, 0) * 80ms + 300ms); }
+@keyframes revealart { 0% { clip-path: inset(0 0 100% 0); filter: contrast(3) hue-rotate(90deg); } 10% { clip-path: inset(0 0 82% 0); transform: translateX(-4%); } 20% { clip-path: inset(40% 0 30% 0); transform: translateX(5%); filter: drop-shadow(-6px 0 #0ff) drop-shadow(6px 0 #f2d); } 30% { clip-path: inset(0 0 45% 0); transform: translateX(-3%); } 45% { clip-path: inset(0 0 12% 0); transform: none; filter: hue-rotate(60deg) contrast(1.6); } 60% { clip-path: inset(0); transform: translateX(2%); filter: drop-shadow(3px 0 #f2d) drop-shadow(-3px 0 #0ff); } 78% { transform: translateX(-1%); filter: saturate(2); } 100% { clip-path: inset(0); transform: none; filter: none; } }
+@keyframes revealin { 0% { opacity: 0; transform: translateX(-6px); } 50% { opacity: .5; transform: translateX(4px); } 100% { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .panel.reveal * { animation: none !important; } }
+.scan { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgb(0 0 0 / .22) 0 1px, transparent 1px 3px); mix-blend-mode: multiply; }
+.scan::after { content: ""; position: absolute; left: 0; right: 0; height: 22%; top: -22%; background: linear-gradient(180deg, transparent, rgb(255 255 255 / .12), transparent); animation: scanmove 3.4s linear infinite; }
+@keyframes scanmove { to { top: 110%; } }
+@media (prefers-reduced-motion: reduce) { .lockicon, .lockicon *, .scan::after { animation: none !important; } }
+.panel > *, .info, .info > *, .media, .media > * { min-width: 0; }
+.media { margin: 14px 0 0; display: grid; gap: 12px; }
+.media, .ov, .ovscroll { max-width: 100%; }
+.player { display: flex; align-items: center; gap: 10px; }
+.play { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--ink-2); background: var(--surface); font-size: 14px; line-height: 1; }
+.play:hover { border-color: var(--ink); }
+.pbar { flex: 1; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.pbar i { display: block; height: 100%; width: 0; background: var(--ink); }
+.ptime { font: 500 12px/1 var(--mono); color: var(--ink-2); min-width: 3.2em; text-align: right; }
+.ov { margin: 0; }
+.cdir { margin-bottom: 6px; }
+.cdir button { padding: 5px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-size: 13px; }
+.cdir button:hover { border-color: var(--ink-2); }
+.cview { height: 460px; overflow-y: auto; border-radius: 8px; background: #05070d; overscroll-behavior: contain; position: relative; }
+.cspace { position: relative; }
+.cview canvas { position: sticky; top: 0; display: block; }
+.ovscroll { max-height: 460px; overflow-y: auto; border-radius: 8px; background: #0e1220; text-align: center; overscroll-behavior: contain; }
+.ovscroll img { display: block; width: 300px; max-width: 100%; height: auto; margin: 0 auto; }
+.ov figcaption { margin-top: 6px; color: var(--ink-2); font-size: 12px; }
+.relock { margin: 10px 0 0; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink-2); font-size: 13px; }
+.relock:hover { border-color: var(--ink-2); color: var(--ink); }
+.pwrow { display: flex; gap: 8px; }
+.lockerr { min-height: 1.4em; margin: 8px 0 0; color: #c0392b; font-size: 13px; }
+.unlock:hover { border-color: var(--ink); }
 .tags2 { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font: 500 11px/1.5 var(--mono); color: var(--ink-2); }
 .tags2 .vtag { padding: 0 7px; border-radius: 99px; background: var(--vc); color: var(--on-v); font-weight: 600; }
 .tags2 .xt { padding: 0 6px; border: 1px solid var(--ink-2); border-radius: 99px; letter-spacing: .04em; }
@@ -160,8 +211,6 @@ dd small { font-size: 12px; color: var(--ink-2); }
 }
 @media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
 </style>
-</head>
-<body>
 
 <div class="wrap">
   <header class="head">
@@ -188,7 +237,7 @@ dd small { font-size: 12px; color: var(--ink-2); }
   </div>
 
   <div class="meta"><span id="count"></span><span>定數為估計值</span></div>
-  <main id="out"></main>
+  <main id="out"><div class="empty"><p>載入中…</p></div></main>
   <p class="foot" id="foot"></p>
 </div>
 
@@ -197,8 +246,147 @@ dd small { font-size: 12px; color: var(--ink-2); }
 </div>
 
 <script>
-const SONGS = [{"id":"linked-tune","title":"Linked Tune","sub":"","full":"Linked Tune","ver":1,"kind":"Master","bpm":"136","meter":"","bpmLo":136.0,"bpmHi":136.0,"level":13,"constant":13.0,"sec":175,"dur":"2:55","notes":619},{"id":"kairos","title":"Kairos","sub":"","full":"Kairos","ver":1,"kind":"Master","bpm":"200","meter":"","bpmLo":200.0,"bpmHi":200.0,"level":13,"constant":13.6,"sec":132,"dur":"2:12","notes":554},{"id":"solitary-dream","title":"Solitary Dream","sub":"虚空の夢","full":"Solitary Dream(虚空の夢)","ver":3,"kind":"Master","bpm":"162","meter":"","bpmLo":162.0,"bpmHi":162.0,"level":13,"constant":13.9,"sec":173,"dur":"2:53","notes":777},{"id":"soteria","title":"ソテリア","sub":"soteria","full":"ソテリア(soteria)","ver":1,"kind":"Master","bpm":"160","meter":"","bpmLo":160.0,"bpmHi":160.0,"level":14,"constant":14.2,"sec":151,"dur":"2:31","notes":730},{"id":"vibes-2k20","title":"Vibes 2k20","sub":"","full":"Vibes 2k20","ver":1,"kind":"Master","bpm":"149","meter":"","bpmLo":149.0,"bpmHi":149.0,"level":14,"constant":14.6,"sec":152,"dur":"2:32","notes":786},{"id":"hemisphere","title":"Hemisphere","sub":"","full":"Hemisphere","ver":1,"kind":"Master","bpm":"193","meter":"","bpmLo":193.0,"bpmHi":193.0,"level":15,"constant":15.0,"sec":127,"dur":"2:07","notes":667},{"id":"heat-abnormal","title":"heat abnormal","sub":"熱異常","full":"heat abnormal(熱異常)","ver":1,"kind":"Master","bpm":"183","meter":"","bpmLo":183.0,"bpmHi":183.0,"level":15,"constant":15.1,"sec":124,"dur":"2:04","notes":884},{"id":"null-override","title":"Null Override","sub":"","full":"Null Override","ver":1,"kind":"Master","bpm":"207","meter":"","bpmLo":207.0,"bpmHi":207.0,"level":15,"constant":15.2,"sec":150,"dur":"2:30","notes":1000},{"id":"distant-call","title":"distant call","sub":"","full":"distant call","ver":2,"kind":"Master","bpm":"168","meter":"","bpmLo":168.0,"bpmHi":168.0,"level":15,"constant":15.4,"sec":180,"dur":"3:00","notes":1350},{"id":"quadruplicity","title":"Quadruplicity","sub":"","full":"Quadruplicity","ver":2,"kind":"Master","bpm":"157","meter":"","bpmLo":157.0,"bpmHi":157.0,"level":15,"constant":15.6,"sec":153,"dur":"2:33","notes":941},{"id":"sense-of-wonder","title":"Sense of wonder","sub":"","full":"Sense of wonder","ver":2,"kind":"Master","bpm":"178","meter":"","bpmLo":178.0,"bpmHi":178.0,"level":15,"constant":15.8,"sec":192,"dur":"3:12","notes":1102},{"id":"technopolis-2085","title":"TECHNOPOLIS 2085","sub":"","full":"TECHNOPOLIS 2085","ver":1,"kind":"Master","bpm":"134","meter":"","bpmLo":134.0,"bpmHi":134.0,"level":15,"constant":15.9,"sec":142,"dur":"2:22","notes":614},{"id":"way-home","title":"way home","sub":"","full":"way home","ver":2,"kind":"Master","bpm":"164.84","meter":"","bpmLo":164.84,"bpmHi":164.84,"level":16,"constant":16.0,"sec":117,"dur":"1:57","notes":830},{"id":"axium-divergence","title":"Axium Divergence","sub":"","full":"Axium Divergence","ver":1,"kind":"Master","bpm":"90 – 180","meter":"","bpmLo":90.0,"bpmHi":180.0,"level":16,"constant":16.2,"sec":159,"dur":"2:39","notes":825},{"id":"labyrinthox","title":"LABYRINTHOX","sub":"","full":"LABYRINTHOX","ver":2,"kind":"Master","bpm":"200","meter":"","bpmLo":200.0,"bpmHi":200.0,"level":16,"constant":16.4,"sec":146,"dur":"2:26","notes":955},{"id":"xilx","title":"XLIX","sub":"","full":"XLIX","ver":2,"kind":"Master","bpm":"210","meter":"","bpmLo":210.0,"bpmHi":210.0,"level":16,"constant":16.5,"sec":139,"dur":"2:19","notes":1083},{"id":"hydra","title":"Hydra","sub":"","full":"Hydra","ver":1,"kind":"Master","bpm":"160","meter":"","bpmLo":160.0,"bpmHi":160.0,"level":16,"constant":16.6,"sec":153,"dur":"2:33","notes":1081},{"id":"7-wonders","title":"7 Wonders","sub":"","full":"7 Wonders","ver":1,"kind":"Master","bpm":"168","meter":"7/4、7/8","bpmLo":168.0,"bpmHi":168.0,"level":16,"constant":16.7,"sec":150,"dur":"2:30","notes":1007},{"id":"cybernetic-vampire","title":"Cybernetic Vampire","sub":"","full":"Cybernetic Vampire","ver":1,"kind":"Master","bpm":"110","meter":"","bpmLo":110.0,"bpmHi":110.0,"level":16,"constant":16.7,"sec":148,"dur":"2:28","notes":700},{"id":"nox-silva","title":"Nox Silva","sub":"","full":"Nox Silva","ver":3,"kind":"Master","bpm":"180","meter":"","bpmLo":180.0,"bpmHi":180.0,"level":16,"constant":16.7,"sec":164,"dur":"2:44","notes":1337},{"id":"ternion","title":"Ternion","sub":"","full":"Ternion","ver":3,"kind":"Master","bpm":"60 – 162","meter":"","bpmLo":60.0,"bpmHi":162.0,"level":16,"constant":16.8,"sec":148,"dur":"2:28","notes":980},{"id":"never-say-goodbye","title":"Never Say Goodbye","sub":"","full":"Never Say Goodbye","ver":3,"kind":"Master","bpm":"200","meter":"","bpmLo":200.0,"bpmHi":200.0,"level":16,"constant":16.9,"sec":170,"dur":"2:50","notes":1444},{"id":"altra-vita","title":"敗北のAltra Vita","sub":"","full":"敗北のAltra Vita","ver":2,"kind":"Master","bpm":"115.5 – 231","meter":"","bpmLo":115.5,"bpmHi":231.0,"level":17,"constant":17.1,"sec":182,"dur":"3:02","notes":1404},{"id":"dread-area","title":"DREAD AREA","sub":"","full":"DREAD AREA","ver":3,"kind":"Master","bpm":"205","meter":"","bpmLo":205.0,"bpmHi":205.0,"level":17,"constant":17.4,"sec":151,"dur":"2:31","notes":1222},{"id":"endtime","title":"Endtime","sub":"","full":"Endtime","ver":1,"kind":"Master","bpm":"180","meter":"","bpmLo":180.0,"bpmHi":180.0,"level":17,"constant":17.7,"sec":136,"dur":"2:16","notes":902},{"id":"bloom-in-two","title":"Bloom In Two","sub":"","full":"Bloom In Two","ver":2,"kind":"Master","bpm":"217","meter":"","bpmLo":217.0,"bpmHi":217.0,"level":17,"constant":17.9,"sec":168,"dur":"2:48","notes":1374},{"id":"gessou","title":"Gessou","sub":"月葬","full":"Gessou(月葬)","ver":1,"kind":"Master","bpm":"190","meter":"","bpmLo":190.0,"bpmHi":190.0,"level":17,"constant":17.9,"sec":168,"dur":"2:48","notes":1123},{"id":"cataclysm-cry","title":"Cataclysm Cry","sub":"","full":"Cataclysm Cry","ver":3,"kind":"Master","bpm":"180","meter":"1/4、3/4、5/4","bpmLo":180.0,"bpmHi":180.0,"level":18,"constant":18.0,"sec":176,"dur":"2:56","notes":1304},{"id":"toy-rhapsody-finale","title":"toy-rhapsody-finale","sub":"玩具狂奏曲 -終焉-","full":"toy-rhapsody-finale-(玩具狂奏曲 -終焉-)","ver":2,"kind":"Master","bpm":"130","meter":"6/8","bpmLo":130.0,"bpmHi":130.0,"level":18,"constant":18.2,"sec":156,"dur":"2:36","notes":1246},{"id":"go-run-sh1ne","title":"Go! Run! Sh1ne!","sub":"殿ッ！？ご乱心！？","full":"Go! Run! Sh1ne!(殿ッ！？ご乱心！？)","ver":3,"kind":"Master","bpm":"200 – 1000","meter":"6/8","bpmLo":200.0,"bpmHi":1000.0,"level":18,"constant":18.4,"sec":132,"dur":"2:12","notes":1267},{"id":"super-symmetry","title":"[ Super symmetry ]","sub":"","full":"[ Super symmetry ]","ver":3,"kind":"Master","bpm":"210","meter":"","bpmLo":210.0,"bpmHi":210.0,"level":18,"constant":18.5,"sec":165,"dur":"2:45","notes":1324},{"id":"rainshower","title":"rainshower","sub":"驟雨の狭間","full":"rainshower (驟雨の狭間)","ver":2,"kind":"Master","bpm":"174","meter":"","bpmLo":174.0,"bpmHi":174.0,"level":18,"constant":18.6,"sec":226,"dur":"3:46","notes":1416},{"id":"solarorbit-connected-with-the-espabrothe","title":"SolarOrbit-Connected with the Espabrother-","sub":"","full":"SolarOrbit-Connected with the Espabrother-","ver":1,"kind":"Master","bpm":"110 – 440","meter":"","bpmLo":110.0,"bpmHi":440.0,"level":18,"constant":18.7,"sec":163,"dur":"2:43","notes":1382},{"id":"hatsune-concerto-no-01-suisei","title":"Hatsune Concerto No.01 \"suisei\"","sub":"初音狂奏曲第01番「彗惺」","full":"Hatsune Concerto No.01 \"suisei\"  ( 初音狂奏曲第01番「彗惺」)","ver":2,"kind":"Master","bpm":"220","meter":"","bpmLo":220.0,"bpmHi":220.0,"level":18,"constant":18.9,"sec":197,"dur":"3:17","notes":2026},{"id":"ogyarinizer","title":"Ogyarinizer","sub":"","full":"Ogyarinizer","ver":1,"kind":"Master","bpm":"155 – 310","meter":"","bpmLo":155.0,"bpmHi":310.0,"level":19,"constant":19.0,"sec":130,"dur":"2:10","notes":1471},{"id":"riven-pilgrimage","title":"Riven Pilgrimage","sub":"","full":"Riven Pilgrimage","ver":3,"kind":"Master","bpm":"180","meter":"","bpmLo":180.0,"bpmHi":180.0,"level":19,"constant":19.2,"sec":162,"dur":"2:42","notes":1262},{"id":"phantom-crisis","title":"Phantom Crisis","sub":"","full":"Phantom Crisis","ver":1,"kind":"Master","bpm":"235","meter":"","bpmLo":235.0,"bpmHi":235.0,"level":19,"constant":19.4,"sec":151,"dur":"2:31","notes":1391},{"id":"antikythera","title":"antikythera","sub":"","full":"antikythera","ver":2,"kind":"Master","bpm":"220","meter":"","bpmLo":220.0,"bpmHi":220.0,"level":19,"constant":19.6,"sec":170,"dur":"2:50","notes":1769},{"id":"0-0000034","title":"0.0000034","sub":"","full":"0.0000034","ver":1,"kind":"Master","bpm":"239","meter":"","bpmLo":239.0,"bpmHi":239.0,"level":19,"constant":19.9,"sec":175,"dur":"2:55","notes":1434},{"id":"supernova","title":"SUPERNOVA","sub":"","full":"SUPERNOVA","ver":2,"kind":"Master","bpm":"168 – 597.32","meter":"","bpmLo":168.0,"bpmHi":597.32,"level":20,"constant":20.0,"sec":210,"dur":"3:30","notes":1888},{"id":"if-infinity","title":"If=Infinity","sub":"","full":"If=Infinity","ver":2,"kind":"Master","bpm":"203","meter":"","bpmLo":203.0,"bpmHi":203.0,"level":20,"constant":20.1,"sec":410,"dur":"6:50","notes":3666},{"id":"un","title":"un","sub":"","full":"un","ver":3,"kind":"Master","bpm":"188","meter":"","bpmLo":188.0,"bpmHi":188.0,"level":20,"constant":20.2,"sec":164,"dur":"2:44","notes":1444},{"id":"entrance-to-the-chaos","title":"Entrance to the Chaos","sub":"","full":"Entrance to the Chaos","ver":3,"kind":"Master","bpm":"207","meter":"","bpmLo":207.0,"bpmHi":207.0,"level":20,"constant":20.3,"sec":145,"dur":"2:25","notes":1249},{"id":"xaleid-scopix","title":"Xaleid ◆ scopiX","sub":"","full":"Xaleid ◆ scopiX","ver":1,"kind":"Master","bpm":"140 – 240","meter":"","bpmLo":140.0,"bpmHi":240.0,"level":20,"constant":20.4,"sec":268,"dur":"4:28","notes":2145},{"id":"younithm","title":"YOUNITHM","sub":"","full":"YOUNITHM","ver":1,"kind":"Master","bpm":"260","meter":"","bpmLo":260.0,"bpmHi":260.0,"level":20,"constant":20.5,"sec":180,"dur":"3:00","notes":1444},{"id":"exoplanetary-mirage","title":"Exoplanetary Mirage","sub":"","full":"Exoplanetary Mirage","ver":3,"kind":"Master","bpm":"192","meter":"","bpmLo":192.0,"bpmHi":192.0,"level":20,"constant":20.6,"sec":177,"dur":"2:57","notes":1626},{"id":"kaijuu-ni-naritai","title":"Kaijuu Ni Naritai","sub":"怪獣になりたい","full":"Kaijuu Ni Naritai(怪獣になりたい)","ver":1,"kind":"Master","bpm":"220","meter":"","bpmLo":220.0,"bpmHi":220.0,"level":20,"constant":20.7,"sec":127,"dur":"2:07","notes":1200},{"id":"hate","title":"Hate","sub":"ハテ","full":"Hate(ハテ)","ver":3,"kind":"Master","bpm":"220.5","meter":"7/4","bpmLo":220.5,"bpmHi":220.5,"level":20,"constant":20.8,"sec":175,"dur":"2:55","notes":1500},{"id":"once-forgotten-nothing-remains","title":"Once Forgotten, Nothing Remains","sub":"","full":"Once Forgotten, Nothing Remains","ver":2,"kind":"Master","bpm":"63 – 252","meter":"","bpmLo":63.0,"bpmHi":252.0,"level":20,"constant":20.9,"sec":600,"dur":"10:00","notes":5505},{"id":"melodique","title":"Melodiniq","sub":"","full":"Melodiniq","ver":1,"kind":"Master","bpm":"193 – 240","meter":"","bpmLo":193.0,"bpmHi":240.0,"level":21,"constant":21.0,"sec":183,"dur":"3:03","notes":1761},{"id":"acta-est-fabula-plaudite","title":"acta est fabula,plaudite.","sub":"","full":"acta est fabula,plaudite.","ver":2,"kind":"Master","bpm":"100 – 270","meter":"","bpmLo":100.0,"bpmHi":270.0,"level":21,"constant":21.0,"sec":840,"dur":"14:00","notes":8553},{"id":"un-extra","title":"un","sub":"","full":"un","ver":3,"kind":"Extra","bpm":"180","meter":"","bpmLo":180.0,"bpmHi":180.0,"level":18,"constant":18.6,"sec":164,"dur":"2:44","notes":1379},{"id":"nox-silva-extra","title":"Nox Silva","sub":"","full":"Nox Silva","ver":3,"kind":"Extra","bpm":"180","meter":"","bpmLo":180.0,"bpmHi":180.0,"level":19,"constant":18.7,"sec":164,"dur":"2:44","notes":1540},{"id":"dread-area-extra","title":"DREAD AREA","sub":"","full":"DREAD AREA","ver":3,"kind":"Extra","bpm":"205","meter":"","bpmLo":205.0,"bpmHi":205.0,"level":18,"constant":18.8,"sec":151,"dur":"2:31","notes":1164}];
-const EDITION = "定數表 Ver.3.3.0";
+function prep(s) {
+  const nums = (String(s.bpm ?? "").match(/\d+(?:\.\d+)?/g) || []).map(Number);
+  const [mm, ss] = s.dur ? String(s.dur).split(":").map(Number) : [0, 0];
+  return { sub: "", meter: "", kind: "Master", level: null, constant: null, bpm: null, dur: null, notes: null, ...s,
+    full: s.title + " " + (s.sub || ""),
+    bpmHi: nums.length ? Math.max(...nums) : null,
+    sec: s.dur ? mm * 60 + ss : null };
+}
+function init(DATA) {
+const SONGS = DATA.songs.map(prep);
+const SECRET_PREFIX = "chartdb-secret-";
+const secKey = s => SECRET_PREFIX + s.id + ":" + String(s.enc.d).slice(0, 16);
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function decryptPayload(enc, pass) {
+  const km = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(enc.s), iterations: 250000, hash: "SHA-256" }, km, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  const buf = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(enc.i) }, key, b64(enc.d));
+  return JSON.parse(new TextDecoder().decode(buf));
+}
+const RELOCK_PREFIX = "chartdb-relocked-";
+function setRelocked(id, v) { try { v ? localStorage.setItem(RELOCK_PREFIX + id, "1") : localStorage.removeItem(RELOCK_PREFIX + id); } catch (e) {} }
+function maskSong(s) { Object.assign(s, { title: "???", sub: "", full: "???", level: null, constant: null, bpm: null, bpmHi: null, meter: "", dur: null, sec: null, notes: null, composer: "", charter: "", illust: "", _img: null, _lock: true }); }
+function applyPayload(s, pl) { Object.assign(s, prep({ ...s, ...pl })); s._img = pl.img || null; s._auth = pl; delete s._lock; }
+function relock(s) { setRelocked(s.id, true); maskSong(s); recalc(); }
+function reunlock(s) { setRelocked(s.id, false); applyPayload(s, s._auth); recalc(); }
+let justRelocked = null, justUnlocked = null;
+let audioEl = null;
+function stopAudio() { if (audioEl) { audioEl.pause(); audioEl = null; } }
+const mmss = n => Math.floor(n / 60) + ":" + String(Math.floor(n % 60)).padStart(2, "0");
+function scramble(el, ms) {
+  const fin = el.textContent; if (!fin.trim() || el.children.length) return;
+  const cs = "01#%&$@▓▒░", t0 = performance.now();
+  (function tick(now) {
+    const p = Math.min(1, (now - t0) / ms), n = Math.floor(p * fin.length);
+    el.textContent = p >= 1 ? fin : fin.slice(0, n) + [...fin.slice(n)].map(c => c === " " ? " " : cs[Math.random() * cs.length | 0]).join("");
+    if (p < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+const LCOL = ["#a46bff", "#4aa3ff", "#3ddc84", "#ff4d5e"];
+async function mountChart(s) {
+  const box = $("cview"); if (!box) return;
+  let data = s.chartdata;
+  if (!data) {
+    try { data = await (await fetch(s.chart, { cache: "no-cache" })).json(); }
+    catch (e) { box.textContent = "譜面資料載入失敗"; return; }
+  }
+  if (!document.body.contains(box)) return;
+  const PPB = 34, GUT = 8, RG = 36, PAD = 36, VH = 460;
+  const W = Math.max(260, Math.min(box.clientWidth || 340, 420)), LW = (W - GUT - RG) / 4, TX = GUT + LW * 4 + 5;
+  const segs = []; let bacc = 0;
+  data.tc.forEach((c, i) => { if (i) bacc += (c[0] - data.tc[i - 1][0]) * data.tc[i - 1][1] / 60000; segs.push({ t0: c[0], b0: bacc, bpm: c[1] }); });
+  const segAt = t => { let k = 0; for (let i = 0; i < segs.length; i++) if (segs[i].t0 <= t) k = i; return segs[k]; };
+  const bpos = t => { const g = segAt(t); return g.b0 + (t - g.t0) * g.bpm / 60000; };
+  const tAt = b => { let k = 0; for (let i = 0; i < segs.length; i++) if (segs[i].b0 <= b) k = i; const g = segs[k]; return g.t0 + (b - g.b0) * 60000 / g.bpm; };
+  const N = data.n.map(([t, d, l, k]) => ({ b0: bpos(t), b1: l > 60 ? bpos(t + l) : null, d, k }));
+  let Bm = 4; for (const n of N) { const v = n.b1 ?? n.b0; if (v > Bm) Bm = v; }
+  const Btot = Bm + 4;
+  const H = Math.ceil(Btot * PPB + PAD * 2);
+  let up = false;
+  try { up = localStorage.getItem("chartdb-cdir") === "up"; } catch (e) {}
+  const Y = b => up ? H - PAD - b * PPB : PAD + b * PPB;
+  $("cspace").style.height = H + "px";
+  const cv = $("ccv"), dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = W * dpr; cv.height = VH * dpr; cv.style.width = W + "px"; cv.style.height = VH + "px";
+  const ctx = cv.getContext("2d");
+  const draw = () => {
+    const st = box.scrollTop;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, -st * dpr);
+    ctx.fillStyle = "#14161f"; ctx.fillRect(0, st, W, VH);
+    for (let i = 0; i < 4; i++) { ctx.fillStyle = LCOL[i] + "0c"; ctx.fillRect(GUT + i * LW, st, LW, VH); }
+    const bA = up ? (H - PAD - (st + VH)) / PPB : (st - PAD) / PPB, bB = up ? (H - PAD - st) / PPB : (st + VH - PAD) / PPB;
+    const bLo = Math.floor(bA) - 1, bHi = Math.ceil(bB) + 1;
+    ctx.font = "10px ui-monospace, monospace"; ctx.textBaseline = "middle";
+    for (let b = Math.max(0, bLo); b <= bHi; b++) {
+      const y = Y(b), bar = b % 4 === 0;
+      ctx.fillStyle = bar ? "rgba(255,255,255,.35)" : "rgba(255,255,255,.08)";
+      ctx.fillRect(GUT, y, LW * 4, bar ? 1.5 : 1);
+      if (bar) {
+        ctx.fillStyle = "#8a93ad"; ctx.fillText(String(b / 4 + 1), TX, up ? y - 8 : y + 8);
+        if ((b / 4) % 4 === 0) { const s2 = Math.max(0, tAt(b) / 1000); ctx.fillStyle = "#5d6685"; ctx.fillText(Math.floor(s2 / 60) + ":" + String(Math.floor(s2 % 60)).padStart(2, "0"), TX, up ? y + 6 : y + 20); }
+      }
+    }
+    const lo = st - 20, hi = st + VH + 20;
+    const rr = (x, y, w, h, r) => { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); };
+    const dotAt = (cx, y, r, col) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(cx, y, r, 0, 6.3); ctx.fill(); };
+    for (const n of N) {
+      const y0 = Y(n.b0), y1 = n.b1 == null ? y0 : Y(n.b1);
+      if (Math.max(y0, y1) < lo || Math.min(y0, y1) > hi) continue;
+      const x = GUT + n.d * LW, col = LCOL[n.d], cx = x + LW / 2;
+      if (n.k === 0 && n.b1 != null) {
+        const top = Math.min(y0, y1), h = Math.abs(y1 - y0);
+        const g = ctx.createLinearGradient(0, top, 0, top + h); g.addColorStop(0, col + "55"); g.addColorStop(1, col + "15");
+        ctx.fillStyle = g; rr(x + LW * .2, top, LW * .6, h, 5); ctx.fill();
+        ctx.strokeStyle = col + "aa"; ctx.lineWidth = 1.2; rr(x + LW * .2, top, LW * .6, h, 5); ctx.stroke();
+      }
+      if (n.k >= 2 && n.b1 != null) {
+        const top = Math.min(y0, y1), h = Math.abs(y1 - y0);
+        for (let yy = top + 6; yy < top + h; yy += 12) dotAt(cx, yy, 3.2, col);
+      }
+      if (n.k === 1) dotAt(cx, y0, LW * .15, col);
+      else { ctx.fillStyle = col; rr(x + LW * .1, y0 - 5, LW * .8, 10, 5); ctx.fill(); ctx.fillStyle = "#ffffff44"; rr(x + LW * .18, y0 - 4, LW * .64, 3, 1.5); ctx.fill(); }
+    }
+  };
+  box.addEventListener("scroll", () => requestAnimationFrame(draw));
+  const toStart = () => { box.scrollTop = up ? H - VH : 0; };
+  const label = () => { $("cdir").textContent = up ? "↑ 由下往上" : "↓ 由上往下"; };
+  $("cdir").onclick = () => { up = !up; try { localStorage.setItem("chartdb-cdir", up ? "up" : "down"); } catch (e) {} label(); toStart(); draw(); };
+  label(); toStart(); draw();
+}
+function playReveal() {
+  const p = $("panel");
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  p.classList.add("reveal");
+  p.querySelectorAll("dl > div, .big, .scale, .scalewrap").forEach((el, i) => el.style.setProperty("--i", i));
+  scramble(p.querySelector("h2"), 900);
+  p.querySelectorAll(".big b, dl dd").forEach((el, i) => setTimeout(() => scramble(el, 600), 250 + i * 70));
+  setTimeout(() => p.classList.remove("reveal"), 2000);
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+SONGS.forEach(s => {
+  if (!s.enc) return;
+  let c = null;
+  try { c = JSON.parse(localStorage.getItem(secKey(s)) || "null"); } catch (e) {}
+  if (c) {
+    let rl = false;
+    try { rl = localStorage.getItem(RELOCK_PREFIX + s.id) === "1"; } catch (e) {}
+    applyPayload(s, c);
+    if (rl) maskSong(s);
+    return;
+  }
+  maskSong(s);
+});
+async function unlock(s, pass, hook) {
+  const pl = await decryptPayload(s.enc, pass);
+  if (hook) await hook();
+  applyPayload(s, pl);
+  setRelocked(s.id, false);
+  try { localStorage.setItem(secKey(s), JSON.stringify(pl)); } catch (e) {}
+  recalc();
+}
+const EDITION = DATA.edition || "定數表";
 const VNAME = { 1: "Ver.1", 2: "Ver.2", 3: "Ver.3" };
 const HUE = { 1: 322, 2: 199, 3: 150 };
 const SORTS = [
@@ -214,16 +402,25 @@ try { const v = localStorage.getItem("chartdb-view"); if (v === "grid" || v === 
 
 const $ = id => document.getElementById(id);
 const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const fmtC = n => n.toFixed(1);
-const fmtN = n => n.toLocaleString("en-US");
+const fmtC = n => n == null ? "未定" : n.toFixed(1);
+const fmtN = n => n == null ? "—" : n.toLocaleString("en-US");
+const lv = s => s._lock ? "Lv.???" : s.level == null ? "Lv.未定" : "Lv." + s.level;
+const orDash = v => v ? esc(v) : "—";
 const byId = Object.fromEntries(SONGS.map(s => [s.id, s]));
-const rankOf = Object.fromEntries(SONGS.map(s => [s.id, 1 + SONGS.filter(o => o.constant > s.constant).length]));
+let rankedCount, rankOf;
+function recalc() {
+  rankedCount = SONGS.filter(s => s.constant != null).length;
+  rankOf = Object.fromEntries(SONGS.map(s => [s.id, 1 + SONGS.filter(o => o.constant != null && s.constant != null && o.constant > s.constant).length]));
+}
+recalc();
 const hash = t => { let h = 0; for (const c of t) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; };
 const hue = s => HUE[s.ver] + (hash(s.id) % 41) - 20;
 const initial = s => (s.title.replace(/^[^A-Za-z0-9぀-ヿ一-鿿]+/, "")[0] || "?").toUpperCase();
 const bpmLine = s => s.bpm + (s.meter ? ` (${s.meter})` : "");
 
 function artHtml(s) {
+  if (s._lock) return `<div class="art" style="--h:${hue(s)}"><div class="lockicon"><svg class="g1" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path class="shackle" d="M8 11V8a4 4 0 0 1 8 0v3"/><rect x="5" y="11" width="14" height="10" rx="2.2" fill="currentColor" fill-opacity=".18"/><circle cx="12" cy="15.4" r="1.2" fill="currentColor" stroke="none"/><path d="M12 16v2.2"/></svg><svg class="g2" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path class="shackle" d="M8 11V8a4 4 0 0 1 8 0v3"/><rect x="5" y="11" width="14" height="10" rx="2.2" fill="currentColor" fill-opacity=".18"/><circle cx="12" cy="15.4" r="1.2" fill="currentColor" stroke="none"/><path d="M12 16v2.2"/></svg><svg class="base" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path class="shackle" d="M8 11V8a4 4 0 0 1 8 0v3"/><rect x="5" y="11" width="14" height="10" rx="2.2" fill="currentColor" fill-opacity=".18"/><circle cx="12" cy="15.4" r="1.2" fill="currentColor" stroke="none"/><path d="M12 16v2.2"/></svg></div><span class="scan" aria-hidden="true"></span></div>`;
+  if (s._img) return `<div class="art" style="--h:${hue(s)}"><img src="${s._img}" alt="${esc(s.title)} 曲繪"></div>`;
   return `<div class="art" style="--h:${hue(s)}"><span class="ini" aria-hidden="true">${esc(initial(s))}</span><img src="art/${s.id}.webp" alt="${esc(s.title)} 曲繪" loading="lazy" decoding="async"></div>`;
 }
 document.addEventListener("error", e => { if (e.target.tagName === "IMG" && e.target.closest(".art")) e.target.remove(); }, true);
@@ -237,8 +434,9 @@ function visible() {
     (!q || (s.full + " " + s.title + " " + s.sub).toLowerCase().includes(q))
   ).sort((a, b) => {
     const x = f(a), y = f(b);
+    if (x == null || y == null) return x == y ? a.title.localeCompare(b.title) : x == null ? 1 : -1;
     const d = typeof x === "string" ? x.localeCompare(y) : x - y;
-    return d * S.dir || a.constant - b.constant || a.ver - b.ver || a.title.localeCompare(b.title);
+    return d * S.dir || (a.constant ?? 99) - (b.constant ?? 99) || a.ver - b.ver || a.title.localeCompare(b.title);
   });
 }
 
@@ -246,12 +444,12 @@ function cardHtml(s) {
   return `<button type="button" class="card" data-v="${s.ver}" data-id="${s.id}">
     <div class="art-wrap">${artHtml(s)}</div>
     <div class="body">
-      <div class="tags2"><span class="vtag">${VNAME[s.ver]}</span><span>Lv.${s.level}</span>${s.kind === "Extra" ? "<span class=\"xt\">EXTRA</span>" : ""}</div>
+      <div class="tags2"><span class="vtag">${VNAME[s.ver]}</span><span>${lv(s)}</span>${s.kind === "Extra" ? "<span class=\"xt\">EXTRA</span>" : ""}</div>
       <p class="t">${esc(s.title)}${s.sub ? ` <span class="sub">${esc(s.sub)}</span>` : ""}</p>
-      <div class="stats">
+      ${s._lock ? `<div class="stats"><div class="cst"><small>定數</small><b>???</b></div><div class="mini"><span>劇透內容，點擊查看</span></div></div>` : `<div class="stats">
         <div class="cst"><small>定數</small><b>${fmtC(s.constant)}</b></div>
-        <div class="mini"><span>${esc(s.bpm)} BPM</span><span class="row2"><b>${s.dur}</b><b>${fmtN(s.notes)} notes</b></span></div>
-      </div>
+        <div class="mini"><span>${orDash(s.bpm)} BPM</span><span class="row2"><b>${s.dur || "—"}</b><b>${fmtN(s.notes)} notes</b></span></div>
+      </div>`}
     </div>
   </button>`;
 }
@@ -269,7 +467,7 @@ function render() {
   } else {
     const th = (k, label, cls) => `<th class="${cls || ""}" ${S.key === k ? `aria-sort="${S.dir > 0 ? "ascending" : "descending"}"` : ""}><button type="button" data-sort="${k}">${label}</button></th>`;
     out.innerHTML = `<div class="tablewrap"><table><thead><tr>${th("title", "曲名")}<th>版本</th><th class="num">難易度</th>${th("constant", "定數", "num")}${th("bpm", "BPM", "num")}${th("sec", "時長", "num")}${th("notes", "物量", "num")}</tr></thead><tbody>${
-      list.map(s => `<tr class="row" data-v="${s.ver}" data-id="${s.id}"><td class="nm"><button type="button" data-open="${s.id}">${esc(s.title)}</button>${s.sub ? `<span class="sub">${esc(s.sub)}</span>` : ""}</td><td><span class="dot"></span>${VNAME[s.ver]}${s.kind === "Extra" ? " · Extra" : ""}</td><td class="num">${s.level}</td><td class="num cn">${fmtC(s.constant)}</td><td class="num">${esc(s.bpm)}</td><td class="num">${s.dur}</td><td class="num">${fmtN(s.notes)}</td></tr>`).join("")
+      list.map(s => `<tr class="row" data-v="${s.ver}" data-id="${s.id}"><td class="nm"><button type="button" data-open="${s.id}">${esc(s.title)}</button>${s.sub ? `<span class="sub">${esc(s.sub)}</span>` : ""}</td><td><span class="dot"></span>${VNAME[s.ver]}${s.kind === "Extra" ? " · Extra" : ""}</td>${s._lock ? `<td class="num">???</td><td class="num cn">???</td><td class="num">???</td><td class="num">?:??</td><td class="num">???</td>` : `<td class="num">${s.level ?? "未定"}</td><td class="num cn">${fmtC(s.constant)}</td><td class="num">${orDash(s.bpm)}</td><td class="num">${s.dur || "—"}</td><td class="num">${fmtN(s.notes)}</td>`}</tr>`).join("")
     }</tbody></table></div>`;
   }
 }
@@ -287,7 +485,7 @@ let current = null, opener = null;
 function scaleHtml(s) {
   const lo = 13, hi = 21, pos = c => `calc(8px + (100% - 16px) * ${(c - lo) / (hi - lo)})`;
   const seen = {};
-  const dots = SONGS.map(o => {
+  const dots = SONGS.filter(o => o.constant != null).map(o => {
     const k = o.constant.toFixed(1), n = seen[k] = (seen[k] || 0) + 1;
     return `<i data-v="${o.ver}" class="${o.id === s.id ? "me" : ""}" style="left:${pos(o.constant)};bottom:${4 + (n - 1) * 10}px"></i>`;
   }).join("");
@@ -295,6 +493,7 @@ function scaleHtml(s) {
   return `<div class="scale"><h3>全曲中的定數位置</h3><div class="track">${dots}</div><div class="ticks">${ticks.join("")}</div></div>`;
 }
 function open(id, from) {
+  stopAudio();
   const s = byId[id]; if (!s) return;
   current = id; if (from) opener = from;
   const list = visible(), i = list.findIndex(o => o.id === id);
@@ -303,26 +502,66 @@ function open(id, from) {
   p.innerHTML = `<button type="button" class="x-btn" id="close" aria-label="關閉">✕</button>
     <div>${artHtml(s)}</div>
     <div class="info">
-      <div class="tags"><span class="tag">${VNAME[s.ver]}</span><span class="tag o">${s.kind}</span><span class="tag o">Lv.${s.level}</span></div>
+      <div class="tags"><span class="tag">${VNAME[s.ver]}</span><span class="tag o">${s.kind}</span><span class="tag o">${lv(s)}</span></div>
       <h2 id="dtitle">${esc(s.title)}</h2>${s.sub ? `<p>${esc(s.sub)}</p>` : ""}
-      <div class="big"><div class="cst"><small>定數（估計）</small><b>${fmtC(s.constant)}</b></div><span class="rank">全曲第 ${rankOf[s.id]} / ${SONGS.length}</span></div>
+      ${s._lock ? `${s._auth ? `<p class="lockmsg">這首含有劇透內容。你已驗證過密碼，可以直接解鎖。</p><div class="pwrow"><button type="button" class="unlock" id="unlock">解鎖</button></div><p class="lockerr" id="lockerr" role="alert"></p>` : `<p class="lockmsg">這首含有劇透內容（曲名、曲繪與全部資料），只有持有密碼的人才能查看。</p><div class="pwrow"><input type="password" id="pw" class="search" placeholder="輸入密碼" autocomplete="off" aria-label="密碼"><button type="button" class="unlock" id="unlock">解鎖</button></div><p class="lockerr" id="lockerr" role="alert"></p>`}` : `      <div class="big"><div class="cst"><small>定數（估計）</small><b>${fmtC(s.constant)}</b></div><span class="rank">${s.constant == null ? "" : `全曲第 ${rankOf[s.id]} / ${rankedCount}`}</span></div>
       <dl>
-        <div><dt>BPM</dt><dd>${esc(s.bpm)}${s.meter ? ` <small>(${esc(s.meter)})</small>` : ""}</dd></div>
-        <div><dt>遊玩時長</dt><dd>${s.dur}</dd></div>
+        <div><dt>Composer</dt><dd>${orDash(s.composer)}</dd></div>
+        <div><dt>Charter</dt><dd>${orDash(s.charter)}</dd></div>
+        <div><dt>Illustrator</dt><dd>${orDash(s.illust)}</dd></div>
+        <div><dt>BPM</dt><dd>${orDash(s.bpm)}${s.meter ? ` <small>(${esc(s.meter)})</small>` : ""}</dd></div>
+        <div><dt>遊玩時長</dt><dd>${s.dur || "—"}</dd></div>
         <div><dt>物量</dt><dd>${fmtN(s.notes)}</dd></div>
-        <div><dt>平均物量密度</dt><dd>${(s.notes / s.sec).toFixed(1)} <small>物/秒</small></dd></div>
       </dl>
-      ${scaleHtml(s)}
+      ${s.audio || s.chart || s.chartdata ? `<div class="media">${s.audio ? `<div class="player"><button type="button" class="play" id="play" aria-label="試聽">▶</button><div class="pbar"><i id="pfill"></i></div><span class="ptime" id="ptime">0:30</span></div>` : ""}${s.chart || s.chartdata ? `<figure class="ov"><div class="cdir"><button type="button" id="cdir"></button></div><div class="cview" id="cview"><div class="cspace" id="cspace"><canvas id="ccv"></canvas></div></div><figcaption>譜面一覽：時間方向可用上方按鈕切換，數字是小節編號，可上下捲動。四條軌道由左到右為 1–4 軌。</figcaption></figure>` : ""}</div>` : ""}
+      ${scaleHtml(s)}`}
+      ${s.enc && !s._lock ? `<button type="button" class="relock" id="relock">🔒 重新上鎖</button>` : ""}
       <div class="nav"><button type="button" id="prev" ${prev ? "" : "disabled"}>← ${prev ? esc(prev.title.slice(0, 18)) : "上一首"}</button><button type="button" id="next" ${next ? "" : "disabled"}>${next ? esc(next.title.slice(0, 18)) : "下一首"} →</button></div>
     </div>`;
   $("veil").hidden = false;
   $("close").focus();
   $("close").onclick = close;
+  mountChart(s);
+  if ($("play")) $("play").onclick = () => {
+    if (audioEl) { stopAudio(); $("play").textContent = "▶"; return; }
+    const a = audioEl = new Audio(s.audio);
+    a.addEventListener("timeupdate", () => { if (audioEl !== a) return; $("pfill").style.width = (a.currentTime / (a.duration || 30) * 100) + "%"; $("ptime").textContent = mmss(a.currentTime); });
+    a.addEventListener("ended", () => { if (audioEl === a) { audioEl = null; $("play").textContent = "▶"; $("pfill").style.width = "0"; $("ptime").textContent = "0:30"; } });
+    a.play().then(() => { $("play").textContent = "❚❚"; }).catch(() => { audioEl = null; });
+  };
+  if (s.enc && !s._lock && justUnlocked === id) { justUnlocked = null; playReveal(); }
+  if (s.enc && !s._lock) $("relock").onclick = () => { relock(s); justRelocked = id; render(); open(id); };
+  if (s._lock && justRelocked === id) {
+    justRelocked = null;
+    const ic0 = document.querySelector("#panel .lockicon");
+    if (ic0) { ic0.classList.add("open"); setTimeout(() => { ic0.classList.remove("open"); ic0.classList.add("slam"); }, 80); }
+  }
+  if (s._lock) {
+    const go = async () => {
+      $("lockerr").textContent = "";
+      const ic = document.querySelector("#panel .lockicon");
+      try {
+        if (s._auth) {
+          if (ic) ic.classList.add("open");
+          $("unlock").disabled = true; await sleep(750); reunlock(s);
+        } else {
+          await unlock(s, $("pw").value, async () => { if (ic) ic.classList.add("open"); $("pw").disabled = $("unlock").disabled = true; await sleep(750); });
+        }
+        justUnlocked = id; render(); open(id);
+      } catch (e) {
+        $("lockerr").textContent = "密碼不對。";
+        if (ic) { ic.classList.remove("nope"); void ic.getBoundingClientRect(); ic.classList.add("nope"); }
+      }
+    };
+    $("unlock").onclick = go;
+    if ($("pw")) $("pw").onkeydown = e => { if (e.key === "Enter") go(); };
+  }
   if (prev) $("prev").onclick = () => open(prev.id);
   if (next) $("next").onclick = () => open(next.id);
   try { history.replaceState(null, "", "#" + id); } catch (e) {}
 }
 function close() {
+  stopAudio();
   $("veil").hidden = true; current = null;
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
   if (opener && document.contains(opener)) opener.focus(); opener = null;
@@ -332,10 +571,10 @@ function close() {
 $("edition").textContent = EDITION;
 $("foot").textContent = `${EDITION} · 共 ${SONGS.length} 筆（Master 篇 ${SONGS.filter(s => s.kind === "Master").length}、Extra 篇 ${SONGS.filter(s => s.kind === "Extra").length}）`;
 $("vers").innerHTML = [1, 2, 3].map(v => {
-  const l = SONGS.filter(s => s.ver === v), cs = l.map(s => s.constant);
-  return `<button type="button" class="ver" data-v="${v}" aria-pressed="false"><b>${VNAME[v]}</b><span>${l.length} 首 · ${fmtC(Math.min(...cs))}–${fmtC(Math.max(...cs))}</span></button>`;
+  const l = SONGS.filter(s => s.ver === v), cs = l.map(s => s.constant).filter(c => c != null);
+  return `<button type="button" class="ver" data-v="${v}" aria-pressed="false"><b>${VNAME[v]}</b><span>${l.length} 首 · ${cs.length ? fmtC(Math.min(...cs)) + "–" + fmtC(Math.max(...cs)) : "未定"}</span></button>`;
 }).join("");
-$("lvl").innerHTML = `<option value="all">全部難易度</option>` + [...new Set(SONGS.map(s => s.level))].sort((a, b) => a - b).map(l => `<option value="${l}">Lv.${l}</option>`).join("");
+$("lvl").innerHTML = `<option value="all">全部難易度</option>` + [...new Set(SONGS.map(s => s.level).filter(l => l != null))].sort((a, b) => a - b).map(l => `<option value="${l}">Lv.${l}</option>`).join("");
 $("sort").innerHTML = SORTS.map(([v, t]) => `<option value="${v}">${t}</option>`).join("");
 
 $("vers").addEventListener("click", e => { const b = e.target.closest(".ver"); if (!b) return; const v = +b.dataset.v; S.ver = S.ver === v ? 0 : v; sync(); render(); });
@@ -353,6 +592,7 @@ $("out").addEventListener("click", e => {
 $("veil").addEventListener("click", e => { if (e.target === $("veil")) close(); });
 document.addEventListener("keydown", e => {
   if ($("veil").hidden) return;
+  if (e.target && e.target.tagName === "INPUT" && e.key !== "Escape") return;
   if (e.key === "Escape") close();
   else if (e.key === "ArrowLeft" && $("prev") && !$("prev").disabled) $("prev").click();
   else if (e.key === "ArrowRight" && $("next") && !$("next").disabled) $("next").click();
@@ -361,6 +601,13 @@ window.addEventListener("hashchange", () => { const id = location.hash.slice(1);
 
 sync(); render();
 { const id = location.hash.slice(1); if (byId[id]) open(id); }
+}
+fetch("songs.json", { cache: "no-cache" })
+  .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+  .then(init)
+  .catch(err => {
+    document.getElementById("out").innerHTML = '<div class="empty"><p>資料載入失敗，請重新整理頁面。</p><p>' + String((err && err.message) || err) + '</p></div>';
+  });
 </script>
 
 </body>
