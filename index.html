@@ -300,7 +300,7 @@ async function mountChart(s) {
   const segAt = t => { let k = 0; for (let i = 0; i < segs.length; i++) if (segs[i].t0 <= t) k = i; return segs[k]; };
   const bpos = t => { const g = segAt(t); return g.b0 + (t - g.t0) * g.bpm / 60000; };
   const tAt = b => { let k = 0; for (let i = 0; i < segs.length; i++) if (segs[i].b0 <= b) k = i; const g = segs[k]; return g.t0 + (b - g.b0) * 60000 / g.bpm; };
-  const N = data.n.map(([t, d, l, k]) => ({ b0: bpos(t), b1: l > 60 ? bpos(t + l) : null, d, k }));
+  const N = data.n.map(([t, d, l, k, dv]) => ({ b0: bpos(t), b1: l > 60 ? bpos(t + l) : null, d, k, div: dv }));
   let Bm = 4; for (const n of N) { const v = n.b1 ?? n.b0; if (v > Bm) Bm = v; }
   const Btot = Bm + 4;
   const H = Math.ceil(Btot * PPB + PAD * 2);
@@ -341,12 +341,12 @@ async function mountChart(s) {
         ctx.fillStyle = g; rr(x + LW * .2, top, LW * .6, h, 5); ctx.fill();
         ctx.strokeStyle = col + "aa"; ctx.lineWidth = 1.2; rr(x + LW * .2, top, LW * .6, h, 5); ctx.stroke();
       }
-      if (n.k >= 2 && n.b1 != null) {
-        const top = Math.min(y0, y1), h = Math.abs(y1 - y0);
-        for (let yy = top + 6; yy < top + h; yy += 12) dotAt(cx, yy, 3.2, col);
+      if (n.k >= 2) {
+        const sb = 4 / (n.div || 16);
+        for (let k = n.k === 3 ? 1 : 0, bb = n.b0; (bb = n.b0 + k * sb) <= (n.b1 ?? n.b0) + 0.001; k++) dotAt(cx, Y(bb), Math.max(1.4, Math.min(3.2, sb * PPB * .36)), col);
       }
       if (n.k === 1) dotAt(cx, y0, LW * .15, col);
-      else { ctx.fillStyle = col; rr(x + LW * .1, y0 - 5, LW * .8, 10, 5); ctx.fill(); ctx.fillStyle = "#ffffff44"; rr(x + LW * .18, y0 - 4, LW * .64, 3, 1.5); ctx.fill(); }
+      else if (n.k !== 2) { ctx.fillStyle = col; rr(x + LW * .1, y0 - 5, LW * .8, 10, 5); ctx.fill(); ctx.fillStyle = "#ffffff44"; rr(x + LW * .18, y0 - 4, LW * .64, 3, 1.5); ctx.fill(); }
     }
   };
   box.addEventListener("scroll", () => requestAnimationFrame(draw));
