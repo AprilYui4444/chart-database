@@ -294,7 +294,8 @@ async function mountChart(s) {
   }
   if (!document.body.contains(box)) return;
   const PPB = 34, GUT = 8, RG = 36, PAD = 36, VH = 460;
-  const W = Math.max(260, Math.min(box.clientWidth || 340, 420)), LW = (W - GUT - RG) / 4, TX = GUT + LW * 4 + 5;
+  const W = Math.max(260, Math.min(box.clientWidth || 340, 420)), NC = data.n.some(r => r[1] === 4) ? 5 : 4, LW = (W - GUT - RG) / NC, TX = GUT + LW * NC + 5;
+  const colOf = d => NC === 5 ? (d === 4 ? 2 : d < 2 ? d : d + 1) : d;
   const segs = []; let bacc = 0;
   data.tc.forEach((c, i) => { if (i) bacc += (c[0] - data.tc[i - 1][0]) * data.tc[i - 1][1] / 60000; segs.push({ t0: c[0], b0: bacc, bpm: c[1] }); });
   const segAt = t => { let k = 0; for (let i = 0; i < segs.length; i++) if (segs[i].t0 <= t) k = i; return segs[k]; };
@@ -315,14 +316,14 @@ async function mountChart(s) {
     const st = box.scrollTop;
     ctx.setTransform(dpr, 0, 0, dpr, 0, -st * dpr);
     ctx.fillStyle = "#14161f"; ctx.fillRect(0, st, W, VH);
-    for (let i = 0; i < 4; i++) { ctx.fillStyle = LCOL[i] + "0c"; ctx.fillRect(GUT + i * LW, st, LW, VH); }
+    for (let i = 0; i < NC; i++) { ctx.fillStyle = (NC === 5 && i === 2 ? "#ffc21a" : LCOL[NC === 5 ? (i < 2 ? i : i - 1) : i]) + "0c"; ctx.fillRect(GUT + i * LW, st, LW, VH); }
     const bA = up ? (H - PAD - (st + VH)) / PPB : (st - PAD) / PPB, bB = up ? (H - PAD - st) / PPB : (st + VH - PAD) / PPB;
     const bLo = Math.floor(bA) - 1, bHi = Math.ceil(bB) + 1;
     ctx.font = "10px ui-monospace, monospace"; ctx.textBaseline = "middle";
     for (let b = Math.max(0, bLo); b <= bHi; b++) {
       const y = Y(b), bar = b % 4 === 0;
       ctx.fillStyle = bar ? "rgba(255,255,255,.35)" : "rgba(255,255,255,.08)";
-      ctx.fillRect(GUT, y, LW * 4, bar ? 1.5 : 1);
+      ctx.fillRect(GUT, y, LW * NC, bar ? 1.5 : 1);
       if (bar) {
         ctx.fillStyle = "#8a93ad"; ctx.fillText(String(b / 4 + 1), TX, up ? y - 8 : y + 8);
         if ((b / 4) % 4 === 0) { const s2 = Math.max(0, tAt(b) / 1000); ctx.fillStyle = "#5d6685"; ctx.fillText(Math.floor(s2 / 60) + ":" + String(Math.floor(s2 % 60)).padStart(2, "0"), TX, up ? y + 6 : y + 20); }
@@ -334,7 +335,14 @@ async function mountChart(s) {
     for (const n of N) {
       const y0 = Y(n.b0), y1 = n.b1 == null ? y0 : Y(n.b1);
       if (Math.max(y0, y1) < lo || Math.min(y0, y1) > hi) continue;
-      const x = GUT + n.d * LW, col = LCOL[n.d], cx = x + LW / 2;
+      const x = GUT + colOf(n.d) * LW, col = LCOL[n.d] || "#ffc21a", cx = x + LW / 2;
+      if (n.d === 4) {
+        const gx = cx, gold = "#ffc21a";
+        if (n.b1 != null) { const top = Math.min(y0, y1), h = Math.abs(y1 - y0); ctx.fillStyle = gold + "40"; rr(gx - LW * .16, top, LW * .32, h, 5); ctx.fill(); ctx.strokeStyle = gold + "aa"; ctx.lineWidth = 1.2; rr(gx - LW * .16, top, LW * .32, h, 5); ctx.stroke(); }
+        ctx.fillStyle = gold; ctx.beginPath(); ctx.arc(gx, y0, LW * .17, 0, 6.3); ctx.fill();
+        ctx.strokeStyle = "#ffe9a6"; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(gx, y0, LW * .17, 0, 6.3); ctx.stroke();
+        continue;
+      }
       if (n.k === 0 && n.b1 != null) {
         const top = Math.min(y0, y1), h = Math.abs(y1 - y0);
         const g = ctx.createLinearGradient(0, top, 0, top + h); g.addColorStop(0, col + "55"); g.addColorStop(1, col + "15");
