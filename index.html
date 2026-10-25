@@ -123,7 +123,7 @@ h1 { margin: 6px 0 0; font: 700 clamp(30px, 6vw, 46px)/1.05 var(--display); lett
 .cdir { margin-bottom: 6px; }
 .cdir button { padding: 5px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-size: 13px; }
 .cdir button:hover { border-color: var(--ink-2); }
-.cview { height: 460px; overflow-y: auto; border-radius: 8px; background: #05070d; overscroll-behavior: contain; position: relative; }
+.cview { height: 460px; overflow-y: auto; border-radius: 8px; background: #14161f; overscroll-behavior: contain; position: relative; }
 .cspace { position: relative; }
 .cview canvas { position: sticky; top: 0; display: block; }
 .ovscroll { max-height: 460px; overflow-y: auto; border-radius: 8px; background: #0e1220; text-align: center; overscroll-behavior: contain; }
@@ -294,7 +294,8 @@ async function mountChart(s) {
   }
   if (!document.body.contains(box)) return;
   const PPB = 34, GUT = 8, RG = 36, PAD = 36, VH = 460;
-  const W = Math.max(260, Math.min(box.clientWidth || 340, 420)), NC = data.n.some(r => r[1] === 4) ? 5 : 4, LW = (W - GUT - RG) / NC, TX = GUT + LW * NC + 5;
+  const W = Math.max(260, box.clientWidth || 340), NC = data.n.some(r => r[1] === 4) ? 5 : 4, LW = (W - GUT - RG) / NC, TX = GUT + LW * NC + 5;
+  if (NC === 5 && $("ccap")) $("ccap").textContent = "譜面一覽：時間方向可用上方按鈕切換，數字是小節編號，可上下捲動。五條軌道由左到右為 1、2、中間（金色圓點）、3、4 軌。";
   const colOf = d => NC === 5 ? (d === 4 ? 2 : d < 2 ? d : d + 1) : d;
   const segs = []; let bacc = 0;
   data.tc.forEach((c, i) => { if (i) bacc += (c[0] - data.tc[i - 1][0]) * data.tc[i - 1][1] / 60000; segs.push({ t0: c[0], b0: bacc, bpm: c[1] }); });
@@ -521,7 +522,7 @@ function open(id, from) {
         <div><dt>遊玩時長</dt><dd>${s.dur || "—"}</dd></div>
         <div><dt>物量</dt><dd>${fmtN(s.notes)}</dd></div>
       </dl>
-      ${s.audio || s.chart || s.chartdata ? `<div class="media">${s.audio ? `<div class="player"><button type="button" class="play" id="play" aria-label="試聽">▶</button><div class="pbar"><i id="pfill"></i></div><span class="ptime" id="ptime">0:30</span></div>` : ""}${s.chart || s.chartdata ? `<figure class="ov"><div class="cdir"><button type="button" id="cdir"></button></div><div class="cview" id="cview"><div class="cspace" id="cspace"><canvas id="ccv"></canvas></div></div><figcaption>譜面一覽：時間方向可用上方按鈕切換，數字是小節編號，可上下捲動。四條軌道由左到右為 1–4 軌。</figcaption></figure>` : ""}</div>` : ""}
+      ${s.audio || s.chart || s.chartdata ? `<div class="media">${s.audio ? `<div class="player"><button type="button" class="play" id="play" aria-label="試聽">▶</button><div class="pbar"><i id="pfill"></i></div><span class="ptime" id="ptime">0:30</span></div>` : ""}${s.chart || s.chartdata ? `<figure class="ov"><div class="cdir"><button type="button" id="cdir"></button></div><div class="cview" id="cview"><div class="cspace" id="cspace"><canvas id="ccv"></canvas></div></div><figcaption id="ccap">譜面一覽：時間方向可用上方按鈕切換，數字是小節編號，可上下捲動。四條軌道由左到右為 1–4 軌。</figcaption></figure>` : ""}</div>` : ""}
       ${scaleHtml(s)}`}
       ${s.enc && !s._lock ? `<button type="button" class="relock" id="relock">🔒 重新上鎖</button>` : ""}
       <div class="nav"><button type="button" id="prev" ${prev ? "" : "disabled"}>← ${prev ? esc(prev.title.slice(0, 18)) : "上一首"}</button><button type="button" id="next" ${next ? "" : "disabled"}>${next ? esc(next.title.slice(0, 18)) : "下一首"} →</button></div>
