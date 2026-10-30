@@ -22,6 +22,7 @@
   --v1: #ff66cc;
   --v2: #00b0f0;
   --v3: #00b050;
+  --v4: #ff8a1f;
   --on-v: #10121c;
   --focus: #1d4ed8;
   --shadow: 0 10px 30px rgb(18 21 42 / .16);
@@ -55,7 +56,7 @@ button { cursor: pointer; }
 h1 { margin: 6px 0 0; font: 700 clamp(30px, 6vw, 46px)/1.05 var(--display); letter-spacing: .02em; text-wrap: balance; }
 .vers { display: flex; flex-wrap: wrap; gap: 8px; }
 .ver { --vc: var(--ink-2); display: grid; gap: 2px; text-align: left; min-width: 118px; padding: 9px 12px 10px; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--vc); border-radius: 8px; }
-.ver[data-v="1"] { --vc: var(--v1); } .ver[data-v="2"] { --vc: var(--v2); } .ver[data-v="3"] { --vc: var(--v3); }
+.ver[data-v="1"] { --vc: var(--v1); } .ver[data-v="2"] { --vc: var(--v2); } .ver[data-v="3"] { --vc: var(--v3); } .ver[data-v="4"] { --vc: var(--v4); }
 .ver b { font: 700 15px/1.2 var(--display); }
 .ver span { font: 400 11px/1.3 var(--mono); color: var(--ink-2); }
 .ver[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
@@ -75,7 +76,7 @@ h1 { margin: 6px 0 0; font: 700 clamp(30px, 6vw, 46px)/1.05 var(--display); lett
 /* card grid */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
 .card { --vc: var(--ink-2); display: flex; flex-direction: column; min-width: 0; padding: 0; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; transition: transform .15s ease, border-color .15s ease; }
-.card[data-v="1"], .row[data-v="1"] { --vc: var(--v1); } .card[data-v="2"], .row[data-v="2"] { --vc: var(--v2); } .card[data-v="3"], .row[data-v="3"] { --vc: var(--v3); }
+.card[data-v="1"], .row[data-v="1"] { --vc: var(--v1); } .card[data-v="2"], .row[data-v="2"] { --vc: var(--v2); } .card[data-v="3"], .row[data-v="3"] { --vc: var(--v3); } .card[data-v="4"], .row[data-v="4"] { --vc: var(--v4); }
 .card:hover { transform: translateY(-2px); border-color: var(--ink-2); }
 .art { position: relative; aspect-ratio: 1 / 1; max-width: 100%; overflow: hidden;
   background: repeating-linear-gradient(0deg, rgb(255 255 255 / .07) 0 1px, transparent 1px 18px),
@@ -174,7 +175,7 @@ tr:last-child td { border-bottom: 0; }
 /* detail */
 .veil { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px; background: rgb(8 10 20 / .62); }
 .panel { --vc: var(--ink-2); position: relative; width: min(860px, 100%); max-height: calc(100% - 8px); overflow: auto; display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 22px; padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
-.panel[data-v="1"] { --vc: var(--v1); } .panel[data-v="2"] { --vc: var(--v2); } .panel[data-v="3"] { --vc: var(--v3); }
+.panel[data-v="1"] { --vc: var(--v1); } .panel[data-v="2"] { --vc: var(--v2); } .panel[data-v="3"] { --vc: var(--v3); } .panel[data-v="4"] { --vc: var(--v4); }
 .panel .art { border-radius: 10px; }
 .panel .ini { font-size: clamp(72px, 14vw, 120px); }
 .x-btn { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; background: var(--bg); font-size: 16px; line-height: 1; }
@@ -196,7 +197,7 @@ dd small { font-size: 12px; color: var(--ink-2); }
 .scale h3 { margin: 0 0 6px; font: 500 11px/1.3 var(--mono); letter-spacing: .06em; color: var(--ink-2); font-weight: 500; }
 .track { position: relative; height: 40px; border-bottom: 1px solid var(--ink-2); }
 .track i { position: absolute; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--vc); opacity: .55; }
-.track i[data-v="1"] { --vc: var(--v1); } .track i[data-v="2"] { --vc: var(--v2); } .track i[data-v="3"] { --vc: var(--v3); }
+.track i[data-v="1"] { --vc: var(--v1); } .track i[data-v="2"] { --vc: var(--v2); } .track i[data-v="3"] { --vc: var(--v3); } .track i[data-v="4"] { --vc: var(--v4); }
 .track i.me { opacity: 1; width: 12px; height: 12px; margin-left: -6px; box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); z-index: 2; }
 .ticks { position: relative; height: 18px; font: 400 10px/18px var(--mono); color: var(--ink-2); }
 .ticks span { position: absolute; transform: translateX(-50%); }
@@ -396,8 +397,8 @@ async function unlock(s, pass, hook) {
   recalc();
 }
 const EDITION = DATA.edition || "定數表";
-const VNAME = { 1: "Ver.1", 2: "Ver.2", 3: "Ver.3" };
-const HUE = { 1: 322, 2: 199, 3: 150 };
+const VNAME = { 1: "Ver.1", 2: "Ver.2", 3: "Ver.3", 4: "活動曲" };
+const HUE = { 1: 322, 2: 199, 3: 150, 4: 30 };
 const SORTS = [
   ["constant-asc", "定數 低 → 高"], ["constant-desc", "定數 高 → 低"],
   ["notes-desc", "物量 多 → 少"], ["notes-asc", "物量 少 → 多"],
@@ -579,7 +580,7 @@ function close() {
 /* wiring */
 $("edition").textContent = EDITION;
 $("foot").textContent = `${EDITION} · 共 ${SONGS.length} 筆（Master 篇 ${SONGS.filter(s => s.kind === "Master").length}、Extra 篇 ${SONGS.filter(s => s.kind === "Extra").length}）`;
-$("vers").innerHTML = [1, 2, 3].map(v => {
+$("vers").innerHTML = [1, 2, 3, 4].map(v => {
   const l = SONGS.filter(s => s.ver === v), cs = l.map(s => s.constant).filter(c => c != null);
   return `<button type="button" class="ver" data-v="${v}" aria-pressed="false"><b>${VNAME[v]}</b><span>${l.length} 首 · ${cs.length ? fmtC(Math.min(...cs)) + "–" + fmtC(Math.max(...cs)) : "未定"}</span></button>`;
 }).join("");
@@ -618,6 +619,7 @@ fetch("songs.json", { cache: "no-cache" })
     document.getElementById("out").innerHTML = '<div class="empty"><p>資料載入失敗，請重新整理頁面。</p><p>' + String((err && err.message) || err) + '</p></div>';
   });
 </script>
+
 
 </body>
 </html>
