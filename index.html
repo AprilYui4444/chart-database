@@ -22,7 +22,8 @@
   --v1: #ff66cc;
   --v2: #00b0f0;
   --v3: #00b050;
-  --v4: #ff8a1f;
+  --v4: #ff5c93;
+  --v5: #ff8a1f;
   --on-v: #10121c;
   --focus: #1d4ed8;
   --shadow: 0 10px 30px rgb(18 21 42 / .16);
@@ -56,7 +57,7 @@ button { cursor: pointer; }
 h1 { margin: 6px 0 0; font: 700 clamp(30px, 6vw, 46px)/1.05 var(--display); letter-spacing: .02em; text-wrap: balance; }
 .vers { display: flex; flex-wrap: wrap; gap: 8px; }
 .ver { --vc: var(--ink-2); display: grid; gap: 2px; text-align: left; min-width: 118px; padding: 9px 12px 10px; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--vc); border-radius: 8px; }
-.ver[data-v="1"] { --vc: var(--v1); } .ver[data-v="2"] { --vc: var(--v2); } .ver[data-v="3"] { --vc: var(--v3); } .ver[data-v="4"] { --vc: var(--v4); }
+.ver[data-v="1"] { --vc: var(--v1); } .ver[data-v="2"] { --vc: var(--v2); } .ver[data-v="3"] { --vc: var(--v3); } .ver[data-v="4"] { --vc: var(--v4); } .ver[data-v="5"] { --vc: var(--v5); }
 .ver b { font: 700 15px/1.2 var(--display); }
 .ver span { font: 400 11px/1.3 var(--mono); color: var(--ink-2); }
 .ver[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
@@ -76,12 +77,13 @@ h1 { margin: 6px 0 0; font: 700 clamp(30px, 6vw, 46px)/1.05 var(--display); lett
 /* card grid */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
 .card { --vc: var(--ink-2); display: flex; flex-direction: column; min-width: 0; padding: 0; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; transition: transform .15s ease, border-color .15s ease; }
-.card[data-v="1"], .row[data-v="1"] { --vc: var(--v1); } .card[data-v="2"], .row[data-v="2"] { --vc: var(--v2); } .card[data-v="3"], .row[data-v="3"] { --vc: var(--v3); } .card[data-v="4"], .row[data-v="4"] { --vc: var(--v4); }
+.card[data-v="1"], .row[data-v="1"] { --vc: var(--v1); } .card[data-v="2"], .row[data-v="2"] { --vc: var(--v2); } .card[data-v="3"], .row[data-v="3"] { --vc: var(--v3); } .card[data-v="4"], .row[data-v="4"] { --vc: var(--v4); } .card[data-v="5"], .row[data-v="5"] { --vc: var(--v5); }
 .card:hover { transform: translateY(-2px); border-color: var(--ink-2); }
 .art { position: relative; aspect-ratio: 1 / 1; max-width: 100%; overflow: hidden;
   background: repeating-linear-gradient(0deg, rgb(255 255 255 / .07) 0 1px, transparent 1px 18px),
     linear-gradient(140deg, hsl(var(--h) 50% 40%), hsl(calc(var(--h) + 38) 56% 22%)); }
 .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.abadge { position: absolute; left: 6px; top: 6px; z-index: 2; padding: 2px 9px; border-radius: 999px; background: rgb(0 0 0 / .66); color: #fff; font: 700 11px/1.6 var(--mono); letter-spacing: .08em; }
 .ini { position: absolute; inset: 0; display: grid; place-items: center; font: 700 clamp(48px, 9vw, 84px)/1 var(--display); color: rgb(255 255 255 / .3); }
 .card { border-top: 4px solid var(--vc); }
 .lockmsg { margin: 14px 0 10px; color: var(--ink-2); font-size: 14px; }
@@ -175,7 +177,7 @@ tr:last-child td { border-bottom: 0; }
 /* detail */
 .veil { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px; background: rgb(8 10 20 / .62); }
 .panel { --vc: var(--ink-2); position: relative; width: min(860px, 100%); max-height: calc(100% - 8px); overflow: auto; display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 22px; padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
-.panel[data-v="1"] { --vc: var(--v1); } .panel[data-v="2"] { --vc: var(--v2); } .panel[data-v="3"] { --vc: var(--v3); } .panel[data-v="4"] { --vc: var(--v4); }
+.panel[data-v="1"] { --vc: var(--v1); } .panel[data-v="2"] { --vc: var(--v2); } .panel[data-v="3"] { --vc: var(--v3); } .panel[data-v="4"] { --vc: var(--v4); } .panel[data-v="5"] { --vc: var(--v5); }
 .panel .art { border-radius: 10px; }
 .panel .ini { font-size: clamp(72px, 14vw, 120px); }
 .x-btn { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; background: var(--bg); font-size: 16px; line-height: 1; }
@@ -192,12 +194,13 @@ tr:last-child td { border-bottom: 0; }
 dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px; margin: 0; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 dl div { padding: 9px 12px; background: var(--surface); min-width: 0; }
 dt { font: 500 11px/1.3 var(--mono); letter-spacing: .06em; color: var(--ink-2); }
+dd .src { display: inline-block; margin-top: 4px; padding: 1px 9px; border: 1px solid var(--line); border-radius: 999px; font: 500 11px/1.7 var(--mono); color: var(--ink-2); letter-spacing: .02em; }
 dd { margin: 2px 0 0; font: 500 16px/1.3 var(--mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 dd small { font-size: 12px; color: var(--ink-2); }
 .scale h3 { margin: 0 0 6px; font: 500 11px/1.3 var(--mono); letter-spacing: .06em; color: var(--ink-2); font-weight: 500; }
 .track { position: relative; height: 40px; border-bottom: 1px solid var(--ink-2); }
 .track i { position: absolute; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--vc); opacity: .55; }
-.track i[data-v="1"] { --vc: var(--v1); } .track i[data-v="2"] { --vc: var(--v2); } .track i[data-v="3"] { --vc: var(--v3); } .track i[data-v="4"] { --vc: var(--v4); }
+.track i[data-v="1"] { --vc: var(--v1); } .track i[data-v="2"] { --vc: var(--v2); } .track i[data-v="3"] { --vc: var(--v3); } .track i[data-v="4"] { --vc: var(--v4); } .track i[data-v="5"] { --vc: var(--v5); }
 .track i.me { opacity: 1; width: 12px; height: 12px; margin-left: -6px; box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); z-index: 2; }
 .ticks { position: relative; height: 18px; font: 400 10px/18px var(--mono); color: var(--ink-2); }
 .ticks span { position: absolute; transform: translateX(-50%); }
@@ -223,7 +226,7 @@ dd small { font-size: 12px; color: var(--ink-2); }
   </header>
 
   <div class="bar" role="search">
-    <input class="search" id="q" type="search" placeholder="搜尋曲名" aria-label="搜尋曲名" autocomplete="off">
+    <input class="search" id="q" type="search" placeholder="搜尋曲名、曲師、繪師、來源" aria-label="搜尋曲名、曲師、繪師、來源" autocomplete="off">
     <div class="seg" id="kind" role="group" aria-label="篇別">
       <button type="button" data-k="all" aria-pressed="true">全部</button>
       <button type="button" data-k="Master" aria-pressed="false">Master</button>
@@ -268,7 +271,7 @@ async function decryptPayload(enc, pass) {
 }
 const RELOCK_PREFIX = "chartdb-relocked-";
 function setRelocked(id, v) { try { v ? localStorage.setItem(RELOCK_PREFIX + id, "1") : localStorage.removeItem(RELOCK_PREFIX + id); } catch (e) {} }
-function maskSong(s) { Object.assign(s, { title: "???", sub: "", full: "???", level: null, constant: null, bpm: null, bpmHi: null, meter: "", dur: null, sec: null, notes: null, composer: "", charter: "", illust: "", _img: null, _lock: true }); }
+function maskSong(s) { const nm = s.order ? "??? #" + s.order : "???"; Object.assign(s, { title: nm, sub: "", full: nm, level: null, constant: null, bpm: null, bpmHi: null, meter: "", dur: null, sec: null, notes: null, composer: "", charter: "", illust: "", _img: null, _lock: true }); }
 function applyPayload(s, pl) { Object.assign(s, prep({ ...s, ...pl })); s._img = pl.img || null; s._auth = pl; delete s._lock; }
 function relock(s) { setRelocked(s.id, true); maskSong(s); recalc(); }
 function reunlock(s) { setRelocked(s.id, false); applyPayload(s, s._auth); recalc(); }
@@ -397,8 +400,8 @@ async function unlock(s, pass, hook) {
   recalc();
 }
 const EDITION = DATA.edition || "定數表";
-const VNAME = { 1: "Ver.1", 2: "Ver.2", 3: "Ver.3", 4: "活動曲" };
-const HUE = { 1: 322, 2: 199, 3: 150, 4: 30 };
+const VNAME = { 1: "Ver.1", 2: "Ver.2", 3: "Ver.3", 4: "Ver.4", 5: "活動曲" };
+const HUE = { 1: 322, 2: 199, 3: 150, 4: 343, 5: 30 };
 const SORTS = [
   ["constant-asc", "定數 低 → 高"], ["constant-desc", "定數 高 → 低"],
   ["notes-desc", "物量 多 → 少"], ["notes-asc", "物量 少 → 多"],
@@ -416,6 +419,9 @@ const fmtC = n => n == null ? "未定" : n.toFixed(1);
 const fmtN = n => n == null ? "—" : n.toLocaleString("en-US");
 const lv = s => s._lock ? "Lv.???" : s.level == null ? "Lv.未定" : "Lv." + s.level;
 const orDash = v => v ? esc(v) : "—";
+const SRC_RE = /\s*\[\s*(from|based\s+on)\s*(.*?)\s*\]\s*$/i;
+const splitSrc = v => { const m = SRC_RE.exec(v || ""); return m ? { name: (v || "").slice(0, m.index).trim(), src: (/^from/i.test(m[1]) ? "From " : "Based on ") + m[2].trim() } : { name: (v || "").trim(), src: "" }; };
+const withSrc = v => { const { name, src } = splitSrc(v); return (name ? esc(name) : (src ? "" : "—")) + (src ? `${name ? "<br>" : ""}<span class="src">${esc(src)}</span>` : ""); };
 const byId = Object.fromEntries(SONGS.map(s => [s.id, s]));
 let rankedCount, rankOf;
 function recalc() {
@@ -430,8 +436,8 @@ const bpmLine = s => s.bpm + (s.meter ? ` (${s.meter})` : "");
 
 function artHtml(s) {
   if (s._lock) return `<div class="art" style="--h:${hue(s)}"><div class="lockicon"><svg class="g1" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path class="shackle" d="M8 11V8a4 4 0 0 1 8 0v3"/><rect x="5" y="11" width="14" height="10" rx="2.2" fill="currentColor" fill-opacity=".18"/><circle cx="12" cy="15.4" r="1.2" fill="currentColor" stroke="none"/><path d="M12 16v2.2"/></svg><svg class="g2" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path class="shackle" d="M8 11V8a4 4 0 0 1 8 0v3"/><rect x="5" y="11" width="14" height="10" rx="2.2" fill="currentColor" fill-opacity=".18"/><circle cx="12" cy="15.4" r="1.2" fill="currentColor" stroke="none"/><path d="M12 16v2.2"/></svg><svg class="base" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path class="shackle" d="M8 11V8a4 4 0 0 1 8 0v3"/><rect x="5" y="11" width="14" height="10" rx="2.2" fill="currentColor" fill-opacity=".18"/><circle cx="12" cy="15.4" r="1.2" fill="currentColor" stroke="none"/><path d="M12 16v2.2"/></svg></div><span class="scan" aria-hidden="true"></span></div>`;
-  if (s._img) return `<div class="art" style="--h:${hue(s)}"><img src="${s._img}" alt="${esc(s.title)} 曲繪"></div>`;
-  return `<div class="art" style="--h:${hue(s)}"><span class="ini" aria-hidden="true">${esc(initial(s))}</span><img src="art/${s.id}.webp" alt="${esc(s.title)} 曲繪" loading="lazy" decoding="async"></div>`;
+  if (s._img) return `<div class="art" style="--h:${hue(s)}"><img src="${s._img}" alt="${esc(s.title)} 曲繪">${s.badge ? `<span class="abadge">${esc(s.badge)}</span>` : ""}</div>`;
+  return `<div class="art" style="--h:${hue(s)}"><span class="ini" aria-hidden="true">${esc(initial(s))}</span><img src="art/${s.id}.webp" alt="${esc(s.title)} 曲繪" loading="lazy" decoding="async">${s.badge ? `<span class="abadge">${esc(s.badge)}</span>` : ""}</div>`;
 }
 document.addEventListener("error", e => { if (e.target.tagName === "IMG" && e.target.closest(".art")) e.target.remove(); }, true);
 
@@ -441,7 +447,7 @@ function visible() {
   return SONGS.filter(s =>
     (!S.ver || s.ver === S.ver) && (S.kind === "all" || s.kind === S.kind) &&
     (S.level === "all" || s.level === +S.level) &&
-    (!q || (s.full + " " + s.title + " " + s.sub).toLowerCase().includes(q))
+    (!q || (s.full + " " + s.title + " " + s.sub + " " + (s.composer || "") + " " + (s.illust || "")).toLowerCase().includes(q))
   ).sort((a, b) => {
     const x = f(a), y = f(b);
     if (x == null || y == null) return x == y ? a.title.localeCompare(b.title) : x == null ? 1 : -1;
@@ -516,9 +522,9 @@ function open(id, from) {
       <h2 id="dtitle">${esc(s.title)}</h2>${s.sub ? `<p>${esc(s.sub)}</p>` : ""}
       ${s._lock ? `${s._auth ? `<p class="lockmsg">這首含有劇透內容。你已驗證過密碼，可以直接解鎖。</p><div class="pwrow"><button type="button" class="unlock" id="unlock">解鎖</button></div><p class="lockerr" id="lockerr" role="alert"></p>` : `<p class="lockmsg">這首含有劇透內容（曲名、曲繪與全部資料），只有持有密碼的人才能查看。</p><div class="pwrow"><input type="password" id="pw" class="search" placeholder="輸入密碼" autocomplete="off" aria-label="密碼"><button type="button" class="unlock" id="unlock">解鎖</button></div><p class="lockerr" id="lockerr" role="alert"></p>`}` : `      <div class="big"><div class="cst"><small>定數（估計）</small><b>${fmtC(s.constant)}</b></div><span class="rank">${s.constant == null ? "" : `全曲第 ${rankOf[s.id]} / ${rankedCount}`}</span></div>
       <dl>
-        <div><dt>Composer</dt><dd>${orDash(s.composer)}</dd></div>
+        <div><dt>Composer</dt><dd>${withSrc(s.composer)}</dd></div>
         <div><dt>Charter</dt><dd>${orDash(s.charter)}</dd></div>
-        <div><dt>Illustrator</dt><dd>${orDash(s.illust)}</dd></div>
+        <div><dt>Illustrator</dt><dd>${withSrc(s.illust)}</dd></div>
         <div><dt>BPM</dt><dd>${orDash(s.bpm)}${s.meter ? ` <small>(${esc(s.meter)})</small>` : ""}</dd></div>
         <div><dt>遊玩時長</dt><dd>${s.dur || "—"}</dd></div>
         <div><dt>物量</dt><dd>${fmtN(s.notes)}</dd></div>
@@ -580,7 +586,7 @@ function close() {
 /* wiring */
 $("edition").textContent = EDITION;
 $("foot").textContent = `${EDITION} · 共 ${SONGS.length} 筆（Master 篇 ${SONGS.filter(s => s.kind === "Master").length}、Extra 篇 ${SONGS.filter(s => s.kind === "Extra").length}）`;
-$("vers").innerHTML = [1, 2, 3, 4].map(v => {
+$("vers").innerHTML = [1, 2, 3, 4, 5].map(v => {
   const l = SONGS.filter(s => s.ver === v), cs = l.map(s => s.constant).filter(c => c != null);
   return `<button type="button" class="ver" data-v="${v}" aria-pressed="false"><b>${VNAME[v]}</b><span>${l.length} 首 · ${cs.length ? fmtC(Math.min(...cs)) + "–" + fmtC(Math.max(...cs)) : "未定"}</span></button>`;
 }).join("");
