@@ -194,7 +194,7 @@ tr:last-child td { border-bottom: 0; }
 dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px; margin: 0; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 dl div { padding: 9px 12px; background: var(--surface); min-width: 0; }
 dt { font: 500 11px/1.3 var(--mono); letter-spacing: .06em; color: var(--ink-2); }
-dd .src { display: inline-block; margin-top: 4px; padding: 1px 9px; border: 1px solid var(--line); border-radius: 999px; font: 500 11px/1.7 var(--mono); color: var(--ink-2); letter-spacing: .02em; }
+dd .src { display: block; width: fit-content; max-width: 100%; margin-top: 6px; padding: 1px 0 1px 8px; border: 0; border-left: 2px solid var(--line); border-radius: 0; font: 500 11px/1.6 var(--mono); color: var(--ink-2); letter-spacing: .02em; overflow-wrap: anywhere; }
 dd { margin: 2px 0 0; font: 500 16px/1.3 var(--mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 dd small { font-size: 12px; color: var(--ink-2); }
 .scale h3 { margin: 0 0 6px; font: 500 11px/1.3 var(--mono); letter-spacing: .06em; color: var(--ink-2); font-weight: 500; }
@@ -417,7 +417,7 @@ const $ = id => document.getElementById(id);
 const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const fmtC = n => n == null ? "未定" : n.toFixed(1);
 const fmtN = n => n == null ? "—" : n.toLocaleString("en-US");
-const lv = s => s._lock ? "Lv.???" : s.level == null ? "Lv.未定" : "Lv." + s.level;
+const lv = s => s._lock ? "Lv.???" : s.level == null ? "Lv.未定" : "Lv." + s.level + (s.plus ? "+" : "");
 const orDash = v => v ? esc(v) : "—";
 const SRC_RE = /\s*\[\s*(from|based\s+on)\s*(.*?)\s*\]\s*$/i;
 const splitSrc = v => { const m = SRC_RE.exec(v || ""); return m ? { name: (v || "").slice(0, m.index).trim(), src: (/^from/i.test(m[1]) ? "From " : "Based on ") + m[2].trim() } : { name: (v || "").trim(), src: "" }; };
@@ -483,7 +483,7 @@ function render() {
   } else {
     const th = (k, label, cls) => `<th class="${cls || ""}" ${S.key === k ? `aria-sort="${S.dir > 0 ? "ascending" : "descending"}"` : ""}><button type="button" data-sort="${k}">${label}</button></th>`;
     out.innerHTML = `<div class="tablewrap"><table><thead><tr>${th("title", "曲名")}<th>版本</th><th class="num">難易度</th>${th("constant", "定數", "num")}${th("bpm", "BPM", "num")}${th("sec", "時長", "num")}${th("notes", "物量", "num")}</tr></thead><tbody>${
-      list.map(s => `<tr class="row" data-v="${s.ver}" data-id="${s.id}"><td class="nm"><button type="button" data-open="${s.id}">${esc(s.title)}</button>${s.sub ? `<span class="sub">${esc(s.sub)}</span>` : ""}</td><td><span class="dot"></span>${VNAME[s.ver]}${s.kind === "Extra" ? " · Extra" : ""}</td>${s._lock ? `<td class="num">???</td><td class="num cn">???</td><td class="num">???</td><td class="num">?:??</td><td class="num">???</td>` : `<td class="num">${s.level ?? "未定"}</td><td class="num cn">${fmtC(s.constant)}</td><td class="num">${orDash(s.bpm)}</td><td class="num">${s.dur || "—"}</td><td class="num">${fmtN(s.notes)}</td>`}</tr>`).join("")
+      list.map(s => `<tr class="row" data-v="${s.ver}" data-id="${s.id}"><td class="nm"><button type="button" data-open="${s.id}">${esc(s.title)}</button>${s.sub ? `<span class="sub">${esc(s.sub)}</span>` : ""}</td><td><span class="dot"></span>${VNAME[s.ver]}${s.kind === "Extra" ? " · Extra" : ""}</td>${s._lock ? `<td class="num">???</td><td class="num cn">???</td><td class="num">???</td><td class="num">?:??</td><td class="num">???</td>` : `<td class="num">${s.level == null ? "未定" : s.level + (s.plus ? "+" : "")}</td><td class="num cn">${fmtC(s.constant)}</td><td class="num">${orDash(s.bpm)}</td><td class="num">${s.dur || "—"}</td><td class="num">${fmtN(s.notes)}</td>`}</tr>`).join("")
     }</tbody></table></div>`;
   }
 }

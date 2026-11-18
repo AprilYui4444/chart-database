@@ -53,7 +53,8 @@
    "illust": "A4ri//404-*",
    "charter": "[An imperfect story]",
    "audio": "preview/kairos.mp3",
-   "chart": "chart/kairos.json"
+   "chart": "chart/kairos.json",
+   "plus": true
   },
   {
    "id": "solitary-dream",
@@ -71,7 +72,8 @@
    "illust": "NoctilSerein* (@tsub4.k1_)[ Based on Arcaea ]",
    "charter": "Unfinished Dream",
    "audio": "preview/solitary-dream.mp3",
-   "chart": "chart/solitary-dream.json"
+   "chart": "chart/solitary-dream.json",
+   "plus": true
   },
   {
    "id": "soteria",
@@ -107,7 +109,8 @@
    "illust": "A4ri//404-*",
    "charter": "Yuia 4k2160",
    "audio": "preview/vibes-2k20.mp3",
-   "chart": "chart/vibes-2k20.json"
+   "chart": "chart/vibes-2k20.json",
+   "plus": true
   },
   {
    "id": "hemisphere",
@@ -179,7 +182,8 @@
    "illust": "A4ri//404-*",
    "charter": "UNTITLED",
    "audio": "preview/distant-call.mp3",
-   "chart": "chart/distant-call.json"
+   "chart": "chart/distant-call.json",
+   "plus": true
   },
   {
    "id": "quadruplicity",
@@ -197,7 +201,8 @@
    "illust": "A4ri//404-*",
    "charter": "四合星座",
    "audio": "preview/quadruplicity.mp3",
-   "chart": "chart/quadruplicity.json"
+   "chart": "chart/quadruplicity.json",
+   "plus": true
   },
   {
    "id": "sense-of-wonder",
@@ -215,7 +220,8 @@
    "illust": "A4ri//404-*",
    "charter": "-For Para -",
    "audio": "preview/sense-of-wonder.mp3",
-   "chart": "chart/sense-of-wonder.json"
+   "chart": "chart/sense-of-wonder.json",
+   "plus": true
   },
   {
    "id": "technopolis-2085",
@@ -233,7 +239,8 @@
    "illust": "@SEGA",
    "charter": "TECHNOPOLIS 4444",
    "audio": "preview/technopolis-2085.mp3",
-   "chart": "chart/technopolis-2085.json"
+   "chart": "chart/technopolis-2085.json",
+   "plus": true
   },
   {
    "id": "way-home",
@@ -305,7 +312,8 @@
    "illust": "A4ri//404-*",
    "charter": "WAHT the CORE?! is Yui!",
    "audio": "preview/xilx.mp3",
-   "chart": "chart/xilx.json"
+   "chart": "chart/xilx.json",
+   "plus": true
   },
   {
    "id": "hydra",
@@ -323,7 +331,8 @@
    "illust": "A4ri//404-*",
    "charter": "Yui",
    "audio": "preview/hydra.mp3",
-   "chart": "chart/hydra.json"
+   "chart": "chart/hydra.json",
+   "plus": true
   },
   {
    "id": "7-wonders",
@@ -359,7 +368,8 @@
    "illust": "皇皇(@Paradigm:reboot Chapter 3 - Soulmourner)",
    "charter": "Low-speed-challenge",
    "audio": "preview/cybernetic-vampire.mp3",
-   "chart": "chart/cybernetic-vampire.json"
+   "chart": "chart/cybernetic-vampire.json",
+   "plus": true
   },
   {
    "id": "nox-silva",
@@ -377,7 +387,8 @@
    "charter": "Nox Silva",
    "illust": "Nox Silva",
    "audio": "preview/nox-silva.mp3",
-   "chart": "chart/nox-silva.json"
+   "chart": "chart/nox-silva.json",
+   "plus": true
   },
   {
    "id": "ternion",
@@ -395,7 +406,8 @@
    "illust": "A4ri//404-*[ Based on Paradigm : Reboot ]",
    "charter": "YuI vs Axreita Vs . Sitamiru Feat. April",
    "audio": "preview/ternion.mp3",
-   "chart": "chart/ternion.json"
+   "chart": "chart/ternion.json",
+   "plus": true
   },
   {
    "id": "never-say-goodbye",
@@ -413,7 +425,8 @@
    "illust": "A4ri//404-*",
    "charter": "- Forever -",
    "audio": "preview/never-say-goodbye.mp3",
-   "chart": "chart/never-say-goodbye.json"
+   "chart": "chart/never-say-goodbye.json",
+   "plus": true
   },
   {
    "id": "altra-vita",
@@ -467,7 +480,8 @@
    "illust": "A4ri//404-*",
    "charter": "Yui [ The End of the Time] x Kururu [ For the MaiMai ]",
    "audio": "preview/endtime.mp3",
-   "chart": "chart/endtime.json"
+   "chart": "chart/endtime.json",
+   "plus": true
   },
   {
    "id": "bloom-in-two",
@@ -485,7 +499,8 @@
    "illust": "ツバキ (@tsub4.k1_)[ Based on Vivid/Stasis ]",
    "charter": "You & Me.",
    "audio": "preview/bloom-in-two.mp3",
-   "chart": "chart/bloom-in-two.json"
+   "chart": "chart/bloom-in-two.json",
+   "plus": true
   },
   {
    "id": "gessou",
@@ -575,7 +590,8 @@
    "illust": "A4ri//404-*",
    "charter": "[yuiuy]",
    "audio": "preview/super-symmetry.mp3",
-   "chart": "chart/super-symmetry.json"
+   "chart": "chart/super-symmetry.json",
+   "plus": true
   },
   {
    "id": "rainshower",
@@ -611,7 +627,8 @@
    "illust": "atsushi [@Lanota-Chapter 5 : Mysterious Encounter]",
    "charter": "- you know what to do -",
    "audio": "preview/solarorbit-connected-with-the-espabrothe.mp3",
-   "chart": "chart/solarorbit-connected-with-the-espabrothe.json"
+   "chart": "chart/solarorbit-connected-with-the-espabrothe.json",
+   "plus": true
   },
   {
    "id": "hatsune-concerto-no-01-suisei",
@@ -647,7 +664,8 @@
    "charter": "*發出一陣255bpm16分的哭聲",
    "audio": "preview/ogyarinizer.mp3",
    "chart": "chart/ogyarinizer.json",
-   "illust": "誰來讓這四個月小寶寶別哭了(汗) [ Based on 金子ある ]"
+   "illust": "誰來讓這四個月小寶寶別哭了(汗) [ Based on 金子ある ]",
+   "plus": true
   },
   {
    "id": "trick-master",
@@ -701,7 +719,8 @@
    "illust": "A4ri//404-*",
    "charter": "Yui",
    "audio": "preview/phantom-crisis.mp3",
-   "chart": "chart/phantom-crisis.json"
+   "chart": "chart/phantom-crisis.json",
+   "plus": true
   },
   {
    "id": "antikythera",
@@ -737,7 +756,8 @@
    "illust": "むさぬりゆ",
    "charter": "To Meet One's Beloved",
    "audio": "preview/0-0000034.mp3",
-   "chart": "chart/0-0000034.json"
+   "chart": "chart/0-0000034.json",
+   "plus": true
   },
   {
    "id": "supernova",
@@ -791,7 +811,8 @@
    "illust": "A4ri//404-*[ Based on Arcaea ]",
    "charter": "nu",
    "audio": "preview/un.mp3",
-   "chart": "chart/un.json"
+   "chart": "chart/un.json",
+   "plus": true
   },
   {
    "id": "entrance-to-the-chaos",
@@ -863,7 +884,8 @@
    "illust": "Tia-ocItobUerY[ Based on Phigros ]",
    "charter": "Orbital Velocity : ????.? km/s",
    "audio": "preview/exoplanetary-mirage.mp3",
-   "chart": "chart/exoplanetary-mirage.json"
+   "chart": "chart/exoplanetary-mirage.json",
+   "plus": true
   },
   {
    "id": "kaijuu-ni-naritai",
@@ -881,7 +903,8 @@
    "illust": "我发现画画的时候閉上眼睛会很舒服(@tsub4.k1_)[ Based on からめる ]",
    "charter": "請求檢索譜師精神狀態(@April_Yui4444)",
    "audio": "preview/kaijuu-ni-naritai.mp3",
-   "chart": "chart/kaijuu-ni-naritai.json"
+   "chart": "chart/kaijuu-ni-naritai.json",
+   "plus": true
   },
   {
    "id": "hate",
@@ -899,7 +922,8 @@
    "charter": "Yyui || A4r",
    "audio": "preview/hate.mp3",
    "chart": "chart/hate.json",
-   "illust": "はて，果て*[ Based on Phigros ]"
+   "illust": "はて，果て*[ Based on Phigros ]",
+   "plus": true
   },
   {
    "id": "once-forgotten-nothing-remains",
@@ -917,7 +941,8 @@
    "illust": "A4ri//404-*[ Based on osu! MWC ]",
    "charter": "No one remember Us. (AprilYui x Yukitake x HoshimiyaEna)",
    "audio": "preview/once-forgotten-nothing-remains.mp3",
-   "chart": "chart/once-forgotten-nothing-remains.json"
+   "chart": "chart/once-forgotten-nothing-remains.json",
+   "plus": true
   },
   {
    "id": "melodique",
@@ -971,7 +996,8 @@
    "illust": "A4ri//404-*[ Based on Arcaea ]",
    "charter": "",
    "audio": "preview/un.mp3",
-   "chart": "chart/un-extra.json"
+   "chart": "chart/un-extra.json",
+   "plus": true
   },
   {
    "id": "nox-silva-extra",
@@ -989,7 +1015,8 @@
    "charter": "Nox Silva",
    "illust": "Nox Silva",
    "audio": "preview/nox-silva.mp3",
-   "chart": "chart/nox-silva-extra.json"
+   "chart": "chart/nox-silva-extra.json",
+   "plus": true
   },
   {
    "id": "dread-area-extra",
@@ -1007,7 +1034,8 @@
    "illust": "A4ri//404-*[ Based on Arcaea ]",
    "charter": "",
    "audio": "preview/dread-area.mp3",
-   "chart": "chart/dread-area-extra.json"
+   "chart": "chart/dread-area-extra.json",
+   "plus": true
   },
   {
    "id": "true-home-true-world",
@@ -1043,7 +1071,8 @@
    "charter": "Amethyst",
    "audio": "preview/ametrine.mp3",
    "chart": "chart/ametrine.json",
-   "illust": "Citrine[ Based on Phigros ]"
+   "illust": "Citrine[ Based on Phigros ]",
+   "plus": true
   },
   {
    "id": "petrichor",
@@ -1061,7 +1090,8 @@
    "charter": "Noxcipher * Afterrain -",
    "audio": "preview/petrichor.mp3",
    "chart": "chart/petrichor.json",
-   "illust": "Morrowmist - Lunéveil[ Based on Phigros ]"
+   "illust": "Morrowmist - Lunéveil[ Based on Phigros ]",
+   "plus": true
   },
   {
    "id": "desultory-signals",
@@ -1097,7 +1127,8 @@
    "charter": "message to \" YOU \"",
    "audio": "preview/message.mp3",
    "chart": "chart/message.json",
-   "illust": "神居冰绘 feat. 祈莲"
+   "illust": "神居冰绘 feat. 祈莲",
+   "plus": true
   },
   {
    "id": "what-do-you-want-more-than-a-happy-ending",
@@ -1133,7 +1164,8 @@
    "charter": "Yui - From NULL Unification -",
    "audio": "preview/anu.mp3",
    "chart": "chart/anu.json",
-   "illust": "A4ri//404-*"
+   "illust": "A4ri//404-*",
+   "plus": true
   },
   {
    "id": "lucidomnia",
